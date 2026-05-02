@@ -238,6 +238,7 @@ FISCALITE_UEMOA = {
     "SN": {
         "nom": "Sénégal",
         "devise": "FCFA (XOF)",
+        "langue": "fr",
         "taux_tva": 18,
         "taux_is": 30,
         "taux_ircm": 10,
@@ -253,6 +254,7 @@ FISCALITE_UEMOA = {
     "CI": {
         "nom": "Côte d'Ivoire",
         "devise": "FCFA (XOF)",
+        "langue": "fr",
         "taux_tva": 18,
         "taux_is": 25,
         "taux_ircm": 15,
@@ -268,6 +270,7 @@ FISCALITE_UEMOA = {
     "ML": {
         "nom": "Mali",
         "devise": "FCFA (XOF)",
+        "langue": "fr",
         "taux_tva": 18,
         "taux_is": 30,
         "taux_ircm": 10,
@@ -283,6 +286,7 @@ FISCALITE_UEMOA = {
     "BF": {
         "nom": "Burkina Faso",
         "devise": "FCFA (XOF)",
+        "langue": "fr",
         "taux_tva": 18,
         "taux_is": 27.5,
         "taux_ircm": 12.5,
@@ -298,6 +302,7 @@ FISCALITE_UEMOA = {
     "NE": {
         "nom": "Niger",
         "devise": "FCFA (XOF)",
+        "langue": "fr",
         "taux_tva": 19,
         "taux_is": 30,
         "taux_ircm": 10,
@@ -313,6 +318,7 @@ FISCALITE_UEMOA = {
     "TG": {
         "nom": "Togo",
         "devise": "FCFA (XOF)",
+        "langue": "fr",
         "taux_tva": 18,
         "taux_is": 29,
         "taux_ircm": 10,
@@ -328,6 +334,7 @@ FISCALITE_UEMOA = {
     "BJ": {
         "nom": "Bénin",
         "devise": "FCFA (XOF)",
+        "langue": "fr",
         "taux_tva": 18,
         "taux_is": 30,
         "taux_ircm": 10,
@@ -340,21 +347,24 @@ FISCALITE_UEMOA = {
             "DSS": "20 du mois suivant"
         }
     },
-    "GW": {
-        "nom": "Guinée-Bissau",
-        "devise": "FCFA (XOF)",
-        "taux_tva": 15,
-        "taux_is": 25,
-        "taux_ircm": 10,
-        "seuil_reel": 25000000,
-        "organismes": ["DGI", "INSS"],
-        "echeances": {
-            "TVA": "15 du mois suivant",
-            "IS_acompte": "15 mars, 15 juin, 15 septembre",
-            "IS_solde": "30 avril",
-            "DSS": "15 du mois suivant"
-        }
+"GW": {
+    "nom": "Guinée-Bissau",
+    "nom_local": "Guiné-Bissau",
+    "devise": "FCFA (XOF)",
+    "langue": "pt",
+    "langue_nom": "Português",
+    "taux_tva": 15,
+    "taux_is": 25,
+    "taux_ircm": 10,
+    "seuil_reel": 25000000,
+    "organismes": ["DGCI", "INSS"],
+    "echeances": {
+        "TVA": "15 do mês seguinte",
+        "IS_acompte": "15 março, 15 junho, 15 setembro",
+        "IS_solde": "30 abril",
+        "DSS": "15 do mês seguinte"
     }
+}
 }
 
 def get_pays_uemoa():

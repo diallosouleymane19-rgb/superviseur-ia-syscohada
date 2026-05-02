@@ -3,15 +3,18 @@ from .ai import appel_mistral
 from data.plan_comptable_syscohada import get_info_pays, PLAN_COMPTABLE
 
 def generer_bilan_syscohada(df_balance, code_pays="SN"):
-    """
-    Génère le Bilan SYSCOHADA à partir d'une balance.
-    """
     try:
         pays = get_info_pays(code_pays)
         devise = pays.get("devise", "FCFA")
         nom_pays = pays.get("nom", "")
+        langue = pays.get("langue", "fr")
 
         apercu = df_balance.head(100).to_string()
+
+        if langue == "pt":
+            instruction_langue = "Responde em PORTUGUÊS. Todos os documentos devem ser em português pois é a língua oficial da Guiné-Bissau."
+        else:
+            instruction_langue = "Réponds en FRANÇAIS."
 
         prompt = f"""
 Tu es un expert-comptable SYSCOHADA spécialisé en droit OHADA.
@@ -73,17 +76,19 @@ Donne des recommandations professionnelles à la fin.
         return f"Erreur génération bilan : {e}"
 
 
-def generer_compte_resultat_syscohada(df_balance, code_pays="SN"):
-    """
-    Génère le Compte de Résultat SYSCOHADA.
-    """
+def generer_bilan_syscohada(df_balance, code_pays="SN"):
     try:
         pays = get_info_pays(code_pays)
         devise = pays.get("devise", "FCFA")
         nom_pays = pays.get("nom", "")
-        taux_is = pays.get("taux_is", 30)
+        langue = pays.get("langue", "fr")
 
         apercu = df_balance.head(100).to_string()
+
+        if langue == "pt":
+            instruction_langue = "Responde em PORTUGUÊS. Todos os documentos devem ser em português pois é a língua oficial da Guiné-Bissau."
+        else:
+            instruction_langue = "Réponds en FRANÇAIS."
 
         prompt = f"""
 Tu es un expert-comptable SYSCOHADA.
@@ -145,16 +150,19 @@ Donne des recommandations professionnelles.
         return f"Erreur génération compte de résultat : {e}"
 
 
-def generer_tafire(df_balance, code_pays="SN"):
-    """
-    Génère le TAFIRE - Tableau Financier des Ressources et Emplois.
-    """
+def generer_bilan_syscohada(df_balance, code_pays="SN"):
     try:
         pays = get_info_pays(code_pays)
         devise = pays.get("devise", "FCFA")
         nom_pays = pays.get("nom", "")
+        langue = pays.get("langue", "fr")
 
         apercu = df_balance.head(100).to_string()
+
+        if langue == "pt":
+            instruction_langue = "Responde em PORTUGUÊS. Todos os documentos devem ser em português pois é a língua oficial da Guiné-Bissau."
+        else:
+            instruction_langue = "Réponds en FRANÇAIS."
 
         prompt = f"""
 Tu es un expert-comptable SYSCOHADA.
@@ -197,16 +205,19 @@ Indique tous les montants en {devise}.
         return f"Erreur génération TAFIRE : {e}"
 
 
-def generer_notes_annexes(df_balance, code_pays="SN", nom_entreprise="", exercice=""):
-    """
-    Génère les Notes Annexes SYSCOHADA.
-    """
+def generer_bilan_syscohada(df_balance, code_pays="SN"):
     try:
         pays = get_info_pays(code_pays)
         devise = pays.get("devise", "FCFA")
         nom_pays = pays.get("nom", "")
+        langue = pays.get("langue", "fr")
 
-        apercu = df_balance.head(50).to_string()
+        apercu = df_balance.head(100).to_string()
+
+        if langue == "pt":
+            instruction_langue = "Responde em PORTUGUÊS. Todos os documentos devem ser em português pois é a língua oficial da Guiné-Bissau."
+        else:
+            instruction_langue = "Réponds en FRANÇAIS."
 
         prompt = f"""
 Tu es un expert-comptable SYSCOHADA.

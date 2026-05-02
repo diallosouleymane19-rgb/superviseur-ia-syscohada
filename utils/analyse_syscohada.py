@@ -2,18 +2,19 @@ import pandas as pd
 from .ai import appel_mistral
 from data.plan_comptable_syscohada import get_info_pays
 
-def analyser_balance_syscohada(df, code_pays="SN"):
-    """
-    Analyse IA de la balance selon les normes SYSCOHADA.
-    """
+def generer_bilan_syscohada(df_balance, code_pays="SN"):
     try:
         pays = get_info_pays(code_pays)
         devise = pays.get("devise", "FCFA")
         nom_pays = pays.get("nom", "")
-        taux_tva = pays.get("taux_tva", 18)
-        taux_is = pays.get("taux_is", 30)
+        langue = pays.get("langue", "fr")
 
-        apercu = df.head(100).to_string()
+        apercu = df_balance.head(100).to_string()
+
+        if langue == "pt":
+            instruction_langue = "Responde em PORTUGUÊS. Todos os documentos devem ser em português pois é a língua oficial da Guiné-Bissau."
+        else:
+            instruction_langue = "Réponds en FRANÇAIS."
 
         prompt = f"""
 Tu es un expert-comptable SYSCOHADA/OHADA.
@@ -66,19 +67,19 @@ Tous les montants en {devise}.
         return f"Erreur analyse balance : {e}"
 
 
-def analyser_liasse_fiscale(df, code_pays="SN", exercice=""):
-    """
-    Génère la liasse fiscale selon le pays UEMOA.
-    """
+def generer_bilan_syscohada(df_balance, code_pays="SN"):
     try:
         pays = get_info_pays(code_pays)
         devise = pays.get("devise", "FCFA")
         nom_pays = pays.get("nom", "")
-        taux_tva = pays.get("taux_tva", 18)
-        taux_is = pays.get("taux_is", 30)
-        echeances = pays.get("echeances", {})
+        langue = pays.get("langue", "fr")
 
-        apercu = df.head(100).to_string()
+        apercu = df_balance.head(100).to_string()
+
+        if langue == "pt":
+            instruction_langue = "Responde em PORTUGUÊS. Todos os documentos devem ser em português pois é a língua oficial da Guiné-Bissau."
+        else:
+            instruction_langue = "Réponds en FRANÇAIS."
 
         prompt = f"""
 Tu es un expert fiscaliste spécialisé en droit fiscal {nom_pays}.
@@ -127,16 +128,19 @@ Tous les montants en {devise}.
         return f"Erreur liasse fiscale : {e}"
 
 
-def veille_fiscale_uemoa(code_pays="SN"):
-    """
-    Veille fiscale spécifique au pays UEMOA.
-    """
+def generer_bilan_syscohada(df_balance, code_pays="SN"):
     try:
         pays = get_info_pays(code_pays)
+        devise = pays.get("devise", "FCFA")
         nom_pays = pays.get("nom", "")
-        taux_tva = pays.get("taux_tva", 18)
-        taux_is = pays.get("taux_is", 30)
-        organismes = pays.get("organismes", [])
+        langue = pays.get("langue", "fr")
+
+        apercu = df_balance.head(100).to_string()
+
+        if langue == "pt":
+            instruction_langue = "Responde em PORTUGUÊS. Todos os documentos devem ser em português pois é a língua oficial da Guiné-Bissau."
+        else:
+            instruction_langue = "Réponds en FRANÇAIS."
 
         prompt = f"""
 Tu es un expert fiscaliste spécialisé en droit fiscal {nom_pays} et en droit OHADA.
