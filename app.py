@@ -132,13 +132,14 @@ if page == "🏠 Accueil":
     import plotly.express as px
 
     col_logo, col_titre = st.columns([1, 4])
-with col_logo:
-    st.image("uemoa.png", width=100)
-with col_titre:
-    st.title("Superviseur IA Comptable SYSCOHADA")
+    with col_logo:
+        st.image("uemoa.png", width=100)
+    with col_titre:
+        st.title("Superviseur IA Comptable SYSCOHADA")
 
-st.markdown("### Assistant comptable intelligent — Normes OHADA/UEMOA")
-st.markdown("---")
+    st.markdown("### Assistant comptable intelligent — Normes OHADA/UEMOA")
+    st.markdown("---")
+
     col1, col2, col3 = st.columns(3)
     col1.info("📊 Analyse Balance\nSelon normes SYSCOHADA")
     col2.info("📋 Bilan SYSCOHADA\nGénération automatique")
