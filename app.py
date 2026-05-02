@@ -86,7 +86,7 @@ tr:nth-child(even) { background-color: #f9f9f9; }
 # ---------------------------------------------------------
 # MENU LATÉRAL
 # ---------------------------------------------------------
-st.sidebar.image("https://img.icons8.com/color/96/accounting.png", width=80)
+st.sidebar.image("uemoa.png", width=120)
 st.sidebar.title("Superviseur IA SYSCOHADA")
 st.sidebar.markdown(f"👤 Connecté : **{st.session_state['username']}**")
 st.sidebar.markdown("---")
@@ -131,7 +131,11 @@ st.sidebar.markdown(f"""
 if page == "🏠 Accueil":
     import plotly.express as px
 
-    st.title("🌍 Superviseur IA Comptable SYSCOHADA")
+    col_logo, col_titre = st.columns([1, 4])
+with col_logo:
+    st.image("uemoa.png", width=100)
+with col_titre:
+    st.title("Superviseur IA Comptable SYSCOHADA")
     st.markdown("### Assistant comptable intelligent — Normes OHADA/UEMOA")
     st.markdown("---")
 
