@@ -6,8 +6,4 @@ python-docx
 bcrypt
 feedparser
 openpyxl
-Pillow
 PyPDF2
-pdf2image
-mistralai
-python-dotenv
