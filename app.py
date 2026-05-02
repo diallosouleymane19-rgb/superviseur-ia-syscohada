@@ -86,7 +86,7 @@ tr:nth-child(even) { background-color: #f9f9f9; }
 # ---------------------------------------------------------
 # MENU LATÉRAL
 # ---------------------------------------------------------
-st.sidebar.image("uemoa.png", width=120)
+st.sidebar.image("https://raw.githubusercontent.com/diallosouleymane19-rgb/superviseur-ia-syscohada/main/uemoa.png", width=120)
 st.sidebar.title("Superviseur IA SYSCOHADA")
 st.sidebar.markdown(f"👤 Connecté : **{st.session_state['username']}**")
 st.sidebar.markdown("---")
@@ -133,7 +133,7 @@ if page == "🏠 Accueil":
 
     col_logo, col_titre = st.columns([1, 4])
     with col_logo:
-        st.image("uemoa.png", width=100)
+        st.image("https://raw.githubusercontent.com/diallosouleymane19-rgb/superviseur-ia-syscohada/main/uemoa.png", width=100)
     with col_titre:
         st.title("Superviseur IA Comptable SYSCOHADA")
 
