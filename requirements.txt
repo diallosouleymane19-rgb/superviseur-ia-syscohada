@@ -7,3 +7,5 @@ bcrypt
 feedparser
 openpyxl
 PyPDF2
+python-dotenv
+pymupdf
