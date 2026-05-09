@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
-"""Module d'authentification - SMD Consulting SYSCOHADA"""
+"""Module d'authentification multi-clients - SMD Consulting"""
 import streamlit as st
 
-# Identifiants SYSCOHADA
-VALID_USERNAME = "smdconsulting"
-VALID_PASSWORD = "compta2026"
+# Identifiants clients
+UTILISATEURS = {
+    "smdconsulting@gmail.com": "SMDConsulting2026!",  # Admin SMD
+    # Ajoute ici tes clients :
+    # "client1@cabinet.com": "MotDePasse1!",
+    # "client2@entreprise.com": "MotDePasse2!",
+}
 
 def login(email, password):
     """Authentifie un utilisateur"""
-    if email.strip() == VALID_USERNAME and password.strip() == VALID_PASSWORD:
-        st.session_state["authenticated"] = True
-        st.session_state["user_email"] = email
-        return True
+    if email.strip() in UTILISATEURS:
+        if UTILISATEURS[email.strip()] == password.strip():
+            st.session_state["authenticated"] = True
+            st.session_state["user_email"] = email.strip()
+            return True
     return False
 
 def logout():
