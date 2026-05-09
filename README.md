@@ -102,7 +102,7 @@ financiers selon les normes \*\*SYSCOHADA révisé\*\*.
 
 
 
-🔗 \*\*\[Accéder à l'application](https://superviseur-ia-syscohada.streamlit.app)\*\*
+🔗 \*\*\[Accéder à l'application](https://https://superviseur-ia-syscohada-jbtckjbctftbllgoxfmvur.streamlit.app)\*\*
 
 
 
