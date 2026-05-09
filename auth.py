@@ -4,7 +4,7 @@ import streamlit as st
 
 # Identifiants clients
 UTILISATEURS = {
-    "smdconsulting@gmail.com": "SMDConsulting2026!",  # Admin SMD
+    "smdconsulting": "compta2026",  # Admin SMD SYSCOHADA
     # Ajoute ici tes clients :
     # "client1@cabinet.com": "MotDePasse1!",
     # "client2@entreprise.com": "MotDePasse2!",

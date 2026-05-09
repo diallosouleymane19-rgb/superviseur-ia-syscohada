@@ -455,7 +455,9 @@ elif page == "📋 Bilan SYSCOHADA":
 
             if st.session_state.bil_resultat:
                 st.subheader("📋 Bilan SYSCOHADA :")
-                st.markdown(st.session_state.bil_resultat)
+                bil_txt = st.session_state.bil_resultat
+                bil_txt = bil_txt.replace('| |', '\n').replace('||', '\n')
+                st.markdown(bil_txt)
                 st.divider()
 
                 col1, col2, col3 = st.columns(3)
@@ -466,21 +468,21 @@ elif page == "📋 Bilan SYSCOHADA":
                 with col3:
                     if st.button("💾 Sauvegarder dans dossier", use_container_width=True):
                         sauvegarder_si_entreprise(ent_id, "📋 Bilan", f"Bilan {exercice}", st.session_state.bil_resultat, info_pays['nom'], exercice)
-                with st.container():
+               with st.container():
                     st.markdown("#### 📥 Export Excel Professionnel")
-                    try:
-                        excel_buf = export_etats_financiers_excel(
-                            df, code_pays, ent_nom, exercice
-                        )
-                        st.download_button(
-                            "📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)",
-                            excel_buf,
-                            f"Etats_Financiers_{ent_nom}_{exercice}.xlsx",
-                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            use_container_width=True
-                        )
-                    except Exception as e:
-                        st.error(f"Erreur export Excel : {e}")
+                    col_a, col_b = st.columns(2)
+                    with col_a:
+                        nom_excel = st.text_input("🏢 Nom entreprise", value=ent_nom or "", placeholder="Ex: SARL Dupont", key=f"nom_xl_{id(df)}")
+                    with col_b:
+                        ex_excel = st.text_input("📅 Exercice", value=exercice or "2025", placeholder="Ex: 2025", key=f"ex_xl_{id(df)}")
+                    if not nom_excel:
+                        st.warning("⚠️ Renseignez le nom de l'entreprise pour télécharger")
+                    else:
+                        try:
+                            excel_buf = export_etats_financiers_excel(df, code_pays, nom_excel, ex_excel)
+                            st.download_button("📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)", excel_buf, f"Etats_Financiers_{nom_excel}_{ex_excel}.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True)
+                        except Exception as e:
+                            st.error(f"Erreur export Excel : {e}")
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
@@ -519,7 +521,9 @@ elif page == "📈 Compte de Résultat":
 
             if st.session_state.cr_resultat:
                 st.subheader("📈 Compte de Résultat SYSCOHADA :")
-                st.markdown(st.session_state.cr_resultat)
+                cr_txt = st.session_state.cr_resultat
+                cr_txt = cr_txt.replace('| |', '\n').replace('||', '\n')
+                st.markdown(cr_txt)
                 st.divider()
 
                 col1, col2, col3 = st.columns(3)
@@ -584,7 +588,9 @@ elif page == "💰 TAFIRE":
 
             if st.session_state.taf_resultat:
                 st.subheader("💰 TAFIRE :")
-                st.markdown(st.session_state.taf_resultat)
+                taf_txt = st.session_state.taf_resultat
+                taf_txt = taf_txt.replace('| |', '\n').replace('||', '\n')
+                st.markdown(taf_txt)
                 st.divider()
 
                 col1, col2, col3 = st.columns(3)
