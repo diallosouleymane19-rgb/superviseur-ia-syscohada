@@ -32,6 +32,7 @@ from data.plan_comptable_syscohada import (
     get_pays_uemoa, get_info_pays, rechercher_comptes
 )
 from auth import login, logout, is_connecte
+from utils.export_excel import export_etats_financiers_excel
 
 # =============================================================================
 # INITIALISATION
@@ -465,6 +466,21 @@ elif page == "📋 Bilan SYSCOHADA":
                 with col3:
                     if st.button("💾 Sauvegarder dans dossier", use_container_width=True):
                         sauvegarder_si_entreprise(ent_id, "📋 Bilan", f"Bilan {exercice}", st.session_state.bil_resultat, info_pays['nom'], exercice)
+                with st.container():
+                    st.markdown("#### 📥 Export Excel Professionnel")
+                    try:
+                        excel_buf = export_etats_financiers_excel(
+                            df, code_pays, ent_nom, exercice
+                        )
+                        st.download_button(
+                            "📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)",
+                            excel_buf,
+                            f"Etats_Financiers_{ent_nom}_{exercice}.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            use_container_width=True
+                        )
+                    except Exception as e:
+                        st.error(f"Erreur export Excel : {e}")
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
@@ -514,6 +530,21 @@ elif page == "📈 Compte de Résultat":
                 with col3:
                     if st.button("💾 Sauvegarder dans dossier", use_container_width=True):
                         sauvegarder_si_entreprise(ent_id, "📈 CR", f"CR {exercice}", st.session_state.cr_resultat, info_pays['nom'], exercice)
+                with st.container():
+                    st.markdown("#### 📥 Export Excel Professionnel")
+                    try:
+                        excel_buf = export_etats_financiers_excel(
+                            df, code_pays, ent_nom, exercice
+                        )
+                        st.download_button(
+                            "📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)",
+                            excel_buf,
+                            f"Etats_Financiers_{ent_nom}_{exercice}.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            use_container_width=True
+                        )
+                    except Exception as e:
+                        st.error(f"Erreur export Excel : {e}")
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
@@ -564,6 +595,21 @@ elif page == "💰 TAFIRE":
                 with col3:
                     if st.button("💾 Sauvegarder dans dossier", use_container_width=True):
                         sauvegarder_si_entreprise(ent_id, "💰 TAFIRE", f"TAFIRE {exercice}", st.session_state.taf_resultat, info_pays['nom'], exercice)
+                with st.container():
+                    st.markdown("#### 📥 Export Excel Professionnel")
+                    try:
+                        excel_buf = export_etats_financiers_excel(
+                            df, code_pays, ent_nom, exercice
+                        )
+                        st.download_button(
+                            "📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)",
+                            excel_buf,
+                            f"Etats_Financiers_{ent_nom}_{exercice}.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            use_container_width=True
+                        )
+                    except Exception as e:
+                        st.error(f"Erreur export Excel : {e}")
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
