@@ -446,7 +446,7 @@ elif page == "📊 Analyse Balance SYSCOHADA":
             st.session_state.bal_nom_fichier = fichier.name
 
         try:
-            df = df, erreur = charger_fichier(fichier)(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu de la balance"):
                 st.dataframe(df, use_container_width=True)
@@ -495,7 +495,7 @@ elif page == "📋 Bilan SYSCOHADA":
             st.session_state.bil_nom_fichier = fichier.name
 
         try:
-            df = df, erreur = charger_fichier(fichier)(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -559,7 +559,7 @@ elif page == "📈 Compte de Résultat":
             st.session_state.cr_nom_fichier = fichier.name
 
         try:
-            df = df, erreur = charger_fichier(fichier)(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -624,7 +624,7 @@ elif page == "💰 TAFIRE":
             st.session_state.taf_nom_fichier = fichier.name
 
         try:
-            df = df, erreur = charger_fichier(fichier)(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -688,7 +688,7 @@ elif page == "📎 Notes Annexes":
             st.session_state.notes_nom_fichier = fichier.name
 
         try:
-            df = df, erreur = charger_fichier(fichier)(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -737,7 +737,7 @@ elif page == "🧾 Liasse Fiscale":
             st.session_state.liasse_nom_fichier = fichier.name
 
         try:
-            df = df, erreur = charger_fichier(fichier)(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
