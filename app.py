@@ -546,7 +546,6 @@ elif page == "📈 Compte de Résultat":
                         )
                     except Exception as e:
                         st.error(f"Erreur export Excel : {e}")
-                with st.container():
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
