@@ -483,20 +483,6 @@ elif page == "📋 Bilan SYSCOHADA":
                     except Exception as e:
                         st.error(f"Erreur export Excel : {e}")
                 with st.container():
-                    st.markdown("#### 📥 Export Excel Professionnel")
-                    try:
-                        excel_buf = export_etats_financiers_excel(
-                            df, code_pays, ent_nom, exercice
-                        )
-                        st.download_button(
-                            "📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)",
-                            excel_buf,
-                            f"Etats_Financiers_{ent_nom}_{exercice}.xlsx",
-                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            use_container_width=True
-                        )
-                    except Exception as e:
-                        st.error(f"Erreur export Excel : {e}")
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
@@ -562,20 +548,6 @@ elif page == "📈 Compte de Résultat":
                     except Exception as e:
                         st.error(f"Erreur export Excel : {e}")
                 with st.container():
-                    st.markdown("#### 📥 Export Excel Professionnel")
-                    try:
-                        excel_buf = export_etats_financiers_excel(
-                            df, code_pays, ent_nom, exercice
-                        )
-                        st.download_button(
-                            "📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)",
-                            excel_buf,
-                            f"Etats_Financiers_{ent_nom}_{exercice}.xlsx",
-                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            use_container_width=True
-                        )
-                    except Exception as e:
-                        st.error(f"Erreur export Excel : {e}")
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
@@ -626,21 +598,6 @@ elif page == "💰 TAFIRE":
                 with col3:
                     if st.button("💾 Sauvegarder dans dossier", use_container_width=True):
                         sauvegarder_si_entreprise(ent_id, "💰 TAFIRE", f"TAFIRE {exercice}", st.session_state.taf_resultat, info_pays['nom'], exercice)
-                with st.container():
-                    st.markdown("#### 📥 Export Excel Professionnel")
-                    try:
-                        excel_buf = export_etats_financiers_excel(
-                            df, code_pays, ent_nom, exercice
-                        )
-                        st.download_button(
-                            "📊 Télécharger États Financiers Excel (Bilan + CR + TAFIRE + Ratios)",
-                            excel_buf,
-                            f"Etats_Financiers_{ent_nom}_{exercice}.xlsx",
-                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            use_container_width=True
-                        )
-                    except Exception as e:
-                        st.error(f"Erreur export Excel : {e}")
                 with st.container():
                     st.markdown("#### 📥 Export Excel Professionnel")
                     try:
