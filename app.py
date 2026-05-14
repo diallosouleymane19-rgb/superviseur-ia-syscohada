@@ -8,6 +8,7 @@ Auteur: Souleymane Diallo
 import streamlit as st
 import pandas as pd
 import base64
+from datetime import datetime
 from utils.ai import appel_mistral
 from utils.etats_financiers import (
     generer_bilan_syscohada,
