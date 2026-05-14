@@ -199,7 +199,9 @@ if st.sidebar.button("🚪 Déconnexion", use_container_width=True):
     st.rerun()
 
 st.sidebar.markdown("---")
-
+# Indicateur mode démo
+if st.session_state.get("role") == "demo":
+    st.sidebar.warning("👀 Mode Démonstration")
 page = st.sidebar.selectbox(
     "Navigation",
     [
