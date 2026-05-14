@@ -189,6 +189,19 @@ def sauvegarder_si_autorise(ent_id, type_a, titre, resultat, pays_nom, exercice)
         st.info("💡 Sauvegarde désactivée en mode démonstration.")
     else:
         sauvegarder_si_entreprise(ent_id, type_a, titre, resultat, pays_nom, exercice)
+        def charger_fichier(fichier):
+    """Charge un fichier CSV ou XLSX en DataFrame avec gestion d'erreurs"""
+    try:
+        if fichier.name.endswith('.xlsx'):
+            return pd.read_excel(fichier), None
+        else:
+            try:
+                return pd.read_csv(fichier, encoding='utf-8'), None
+            except:
+                fichier.seek(0)
+                return pd.read_csv(fichier, encoding='latin-1'), None
+    except Exception as e:
+        return None, str(e)
 
 
 # =============================================================================
