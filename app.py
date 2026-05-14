@@ -53,7 +53,6 @@ st.set_page_config(
 if not is_connecte():
     st.title("🔒 Superviseur IA Comptable SYSCOHADA")
     st.subheader("Accès réservé — Normes OHADA/UEMOA")
-
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("---")
@@ -67,13 +66,26 @@ if not is_connecte():
         st.markdown("---")
         email = st.text_input("📧 Email professionnel", placeholder="contact@cabinet.com")
         password = st.text_input("🔑 Mot de passe", type="password")
-
         if st.button("🚀 Se connecter", type="primary", use_container_width=True):
             if login(email, password):
                 st.success("✅ Connexion réussie !")
                 st.rerun()
             else:
                 st.error("❌ Email ou mot de passe incorrect")
+
+        st.markdown("---")
+
+        st.markdown("##### 🎯 Vous souhaitez tester l'application ?")
+        if st.button("👀 Accès Démonstration", use_container_width=True, key="btn_demo"):
+            st.session_state["authenticated"] = True
+            st.session_state["user_email"] = "demo@smdconsulting.pro"
+            st.session_state["role"] = "demo"
+            st.session_state["nom"] = "Démonstration"
+            st.session_state["login_time"] = datetime.now().isoformat()
+            st.rerun()
+
+        st.caption("📧 Demander un accès : contact@smdconsulting.pro")
+        st.markdown("---")
 
     st.divider()
     st.caption("SMD Consulting © 2026 - Comptable IA Augmenté SYSCOHADA")
