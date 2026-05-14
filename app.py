@@ -188,7 +188,7 @@ def sauvegarder_si_autorise(ent_id, type_a, titre, resultat, pays_nom, exercice)
     if is_demo():
         st.info("💡 Sauvegarde désactivée en mode démonstration.")
     else:
-        sauvegarder_si_entreprise(ent_id, type_a, titre, resultat, pays_nom, exercice
+        sauvegarder_si_entreprise(ent_id, type_a, titre, resultat, pays_nom, exercice)
 def charger_fichier(fichier):
     """Charge un fichier CSV ou XLSX en DataFrame avec gestion d'erreurs"""
     try:
