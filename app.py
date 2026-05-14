@@ -207,7 +207,7 @@ page = st.sidebar.selectbox(
 # Neutraliser les séparateurs
 separateurs = ["─── États Financiers ───", "─── Fiscal & Réglementaire ───"]
 if page in separateurs:
-    page = "🏠 Accueil")
+    page = "🏠 Accueil"
 
 # Sélecteur de pays dans la sidebar
 st.sidebar.markdown("---")
