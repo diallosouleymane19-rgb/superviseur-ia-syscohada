@@ -34,6 +34,7 @@ from data.plan_comptable_syscohada import (
 from auth import login, logout, is_connecte
 from utils.export_excel import export_etats_financiers_excel
 from utils.export_excel import export_etats_financiers_excel
+from datetime import datetime
 
 # =============================================================================
 # INITIALISATION
@@ -75,93 +76,23 @@ if not is_connecte():
             else:
                 st.error("❌ Email ou mot de passe incorrect")
 
+        st.markdown("---")
+
+        st.markdown("##### 🎯 Vous souhaitez tester l'application ?")
+        if st.button("👀 Accès Démonstration", use_container_width=True, key="btn_demo"):
+            st.session_state["authenticated"] = True
+            st.session_state["user_email"] = "demo@smdconsulting.pro"
+            st.session_state["role"] = "demo"
+            st.session_state["nom"] = "Démonstration"
+            st.session_state["login_time"] = datetime.now().isoformat()
+            st.rerun()
+
+        st.caption("📧 Demander un accès : contact@smdconsulting.pro")
+        st.markdown("---")
+
     st.divider()
     st.caption("SMD Consulting © 2026 - Comptable IA Augmenté SYSCOHADA")
     st.stop()
-
-# =============================================================================
-# STYLE GLOBAL
-# =============================================================================
-st.markdown("""
-<style>
-body { font-family: 'Segoe UI', sans-serif; }
-table { width: 100%; border-collapse: collapse; }
-th, td { border: 1px solid #ddd; padding: 8px; }
-th { background-color: #1f77b4; color: white; font-weight: bold; }
-tr:nth-child(even) { background-color: #f9f9f9; }
-</style>
-""", unsafe_allow_html=True)
-
-# =============================================================================
-# FONCTIONS UTILITAIRES
-# =============================================================================
-
-def telecharger_html(titre, contenu):
-    """Génère un lien de téléchargement HTML"""
-    html = f"""
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{titre}</title>
-        <style>
-            body {{ font-family: Arial, sans-serif; margin: 40px; color: #333; }}
-            h1 {{ color: #1f77b4; border-bottom: 2px solid #1f77b4; padding-bottom: 10px; }}
-            pre {{ background: #f5f5f5; padding: 20px; border-radius: 8px; white-space: pre-wrap; }}
-        </style>
-    </head>
-    <body>
-        <h1>{titre}</h1>
-        <pre>{contenu}</pre>
-    </body>
-    </html>
-    """
-    b64 = base64.b64encode(html.encode()).decode()
-    href = f'<a href="data:text/html;base64,{b64}" download="{titre}.html">📥 Télécharger en HTML</a>'
-    st.markdown(href, unsafe_allow_html=True)
-
-
-def telecharger_word(titre, contenu, nom_entreprise="", pays="", exercice=""):
-    """Génère un bouton de téléchargement Word"""
-    try:
-        buffer = export_analyse_word(titre, contenu, nom_entreprise, pays, exercice)
-        st.download_button(
-            label="📄 Télécharger en Word (.docx)",
-            data=buffer,
-            file_name=f"{titre}.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        )
-    except Exception as e:
-        st.error(f"Erreur export Word : {e}")
-
-
-def sauvegarder_si_entreprise(ent_id, type_a, titre, resultat, pays_nom, exercice):
-    """Sauvegarde une analyse si une entreprise est sélectionnée"""
-    if ent_id:
-        try:
-            sauvegarder_analyse(ent_id, type_a, titre, resultat, pays_nom, exercice)
-            st.success("✅ Analyse sauvegardée dans le dossier entreprise !")
-        except Exception as e:
-            st.error(f"Erreur sauvegarde : {e}")
-
-
-def selectionner_entreprise(key_prefix):
-    """Widget de sélection d'entreprise réutilisable"""
-    entreprises = lister_entreprises()
-    ent_id = None
-    ent_nom = ""
-    exercice = ""
-
-    if entreprises:
-        st.subheader("🏢 Associer à une entreprise (optionnel)")
-        options = {"-- Aucune --": None}
-        options.update({f"{e[1]} ({e[2]})": e[0] for e in entreprises})
-        choix = st.selectbox("Entreprise", list(options.keys()), key=f"{key_prefix}_ent")
-        ent_id = options[choix]
-        ent_nom = choix.split(" (")[0] if ent_id else ""
-        exercice = st.text_input("Exercice (ex: 2024)", key=f"{key_prefix}_ex")
-
-    return ent_id, ent_nom, exercice
-
 
 # =============================================================================
 # SIDEBAR - NAVIGATION
