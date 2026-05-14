@@ -185,21 +185,29 @@ if st.sidebar.button("🚪 Déconnexion", use_container_width=True):
 
 st.sidebar.markdown("---")
 
-page = st.sidebar.radio(
+page = st.sidebar.selectbox(
     "Navigation",
     [
         "🏠 Accueil",
         "🏢 Dossiers Entreprises",
+        "─── États Financiers ───",
         "📊 Analyse Balance SYSCOHADA",
         "📋 Bilan SYSCOHADA",
         "📈 Compte de Résultat",
         "💰 TAFIRE",
         "📎 Notes Annexes",
+        "─── Fiscal & Réglementaire ───",
         "🧾 Liasse Fiscale",
         "🔍 Plan Comptable OHADA",
         "📰 Veille Fiscale UEMOA",
-    ]
+    ],
+    label_visibility="collapsed"
 )
+
+# Neutraliser les séparateurs
+separateurs = ["─── États Financiers ───", "─── Fiscal & Réglementaire ───"]
+if page in separateurs:
+    page = "🏠 Accueil")
 
 # Sélecteur de pays dans la sidebar
 st.sidebar.markdown("---")
