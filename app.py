@@ -161,6 +161,21 @@ def selectionner_entreprise(key_prefix):
         exercice = st.text_input("Exercice (ex: 2024)", key=f"{key_prefix}_ex")
 
     return ent_id, ent_nom, exercice
+def is_demo():
+    """Vérifie si l'utilisateur est en mode démonstration"""
+    return st.session_state.get("role") == "demo"
+
+def banniere_demo():
+    """Affiche une bannière demo si applicable"""
+    if is_demo():
+        st.warning("👀 **Mode Démonstration** — Données fictives uniquement. Sauvegarde désactivée.")
+
+def sauvegarder_si_autorise(ent_id, type_a, titre, resultat, pays_nom, exercice):
+    """Sauvegarde uniquement si pas en mode démo"""
+    if is_demo():
+        st.info("💡 Sauvegarde désactivée en mode démonstration.")
+    else:
+        sauvegarder_si_entreprise(ent_id, type_a, titre, resultat, pays_nom, exercice)
 
 
 # =============================================================================
