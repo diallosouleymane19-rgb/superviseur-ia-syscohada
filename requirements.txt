@@ -9,3 +9,6 @@ openpyxl
 PyPDF2
 python-dotenv
 pymupdf
+plotly>=5.20.0
+python-docx>=1.1.0
+openpyxl>=3.1.2

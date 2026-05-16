@@ -8,6 +8,7 @@ Auteur: Souleymane Diallo
 import streamlit as st
 import pandas as pd
 import base64
+from datetime import datetime
 from utils.ai import appel_mistral
 from utils.etats_financiers import (
     generer_bilan_syscohada,
@@ -34,7 +35,7 @@ from data.plan_comptable_syscohada import (
 from auth import login, logout, is_connecte
 from utils.export_excel import export_etats_financiers_excel
 from utils.export_excel import export_etats_financiers_excel
-from datetime import datetime
+from smd_streamlit import page_dashboard, page_risque_fiscal
 
 # =============================================================================
 # INITIALISATION
@@ -54,7 +55,6 @@ st.set_page_config(
 if not is_connecte():
     st.title("🔒 Superviseur IA Comptable SYSCOHADA")
     st.subheader("Accès réservé — Normes OHADA/UEMOA")
-
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("---")
@@ -68,7 +68,6 @@ if not is_connecte():
         st.markdown("---")
         email = st.text_input("📧 Email professionnel", placeholder="contact@cabinet.com")
         password = st.text_input("🔑 Mot de passe", type="password")
-
         if st.button("🚀 Se connecter", type="primary", use_container_width=True):
             if login(email, password):
                 st.success("✅ Connexion réussie !")
@@ -95,6 +94,118 @@ if not is_connecte():
     st.stop()
 
 # =============================================================================
+# STYLE GLOBAL
+# =============================================================================
+st.markdown("""
+<style>
+body { font-family: 'Segoe UI', sans-serif; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ddd; padding: 8px; }
+th { background-color: #1f77b4; color: white; font-weight: bold; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+</style>
+""", unsafe_allow_html=True)
+
+# =============================================================================
+# FONCTIONS UTILITAIRES
+# =============================================================================
+
+def telecharger_html(titre, contenu):
+    """Génère un lien de téléchargement HTML"""
+    html = f"""
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{titre}</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 40px; color: #333; }}
+            h1 {{ color: #1f77b4; border-bottom: 2px solid #1f77b4; padding-bottom: 10px; }}
+            pre {{ background: #f5f5f5; padding: 20px; border-radius: 8px; white-space: pre-wrap; }}
+        </style>
+    </head>
+    <body>
+        <h1>{titre}</h1>
+        <pre>{contenu}</pre>
+    </body>
+    </html>
+    """
+    b64 = base64.b64encode(html.encode()).decode()
+    href = f'<a href="data:text/html;base64,{b64}" download="{titre}.html">📥 Télécharger en HTML</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
+
+def telecharger_word(titre, contenu, nom_entreprise="", pays="", exercice=""):
+    """Génère un bouton de téléchargement Word"""
+    try:
+        buffer = export_analyse_word(titre, contenu, nom_entreprise, pays, exercice)
+        st.download_button(
+            label="📄 Télécharger en Word (.docx)",
+            data=buffer,
+            file_name=f"{titre}.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+    except Exception as e:
+        st.error(f"Erreur export Word : {e}")
+
+
+def sauvegarder_si_entreprise(ent_id, type_a, titre, resultat, pays_nom, exercice):
+    """Sauvegarde une analyse si une entreprise est sélectionnée"""
+    if ent_id:
+        try:
+            sauvegarder_analyse(ent_id, type_a, titre, resultat, pays_nom, exercice)
+            st.success("✅ Analyse sauvegardée dans le dossier entreprise !")
+        except Exception as e:
+            st.error(f"Erreur sauvegarde : {e}")
+
+
+def selectionner_entreprise(key_prefix):
+    """Widget de sélection d'entreprise réutilisable"""
+    entreprises = lister_entreprises()
+    ent_id = None
+    ent_nom = ""
+    exercice = ""
+
+    if entreprises:
+        st.subheader("🏢 Associer à une entreprise (optionnel)")
+        options = {"-- Aucune --": None}
+        options.update({f"{e[1]} ({e[2]})": e[0] for e in entreprises})
+        choix = st.selectbox("Entreprise", list(options.keys()), key=f"{key_prefix}_ent")
+        ent_id = options[choix]
+        ent_nom = choix.split(" (")[0] if ent_id else ""
+        exercice = st.text_input("Exercice (ex: 2024)", key=f"{key_prefix}_ex")
+
+    return ent_id, ent_nom, exercice
+def is_demo():
+    """Vérifie si l'utilisateur est en mode démonstration"""
+    return st.session_state.get("role") == "demo"
+
+def banniere_demo():
+    """Affiche une bannière demo si applicable"""
+    if is_demo():
+        st.warning("👀 **Mode Démonstration** — Données fictives uniquement. Sauvegarde désactivée.")
+
+def sauvegarder_si_autorise(ent_id, type_a, titre, resultat, pays_nom, exercice):
+    """Sauvegarde uniquement si pas en mode démo"""
+    if is_demo():
+        st.info("💡 Sauvegarde désactivée en mode démonstration.")
+    else:
+        sauvegarder_si_entreprise(ent_id, type_a, titre, resultat, pays_nom, exercice)
+def charger_fichier(fichier):
+    """Charge un fichier CSV ou XLSX en DataFrame avec gestion d'erreurs"""
+    try:
+        if fichier.name.endswith('.xlsx'):
+            return pd.read_excel(fichier), None
+        else:
+            try:
+                return pd.read_csv(fichier, encoding='utf-8'), None
+            except:
+                fichier.seek(0)
+                return pd.read_csv(fichier, encoding='latin-1'), None
+    except Exception as e:
+        return None, str(e)
+
+
+# =============================================================================
 # SIDEBAR - NAVIGATION
 # =============================================================================
 try:
@@ -115,7 +226,9 @@ if st.sidebar.button("🚪 Déconnexion", use_container_width=True):
     st.rerun()
 
 st.sidebar.markdown("---")
-
+# Indicateur mode démo
+if st.session_state.get("role") == "demo":
+    st.sidebar.warning("👀 Mode Démonstration")
 page = st.sidebar.selectbox(
     "Navigation",
     [
@@ -131,6 +244,10 @@ page = st.sidebar.selectbox(
         "🧾 Liasse Fiscale",
         "🔍 Plan Comptable OHADA",
         "📰 Veille Fiscale UEMOA",
+        "─── Fiscal Quantitatif ───",
+        "─── États Financiers ───",
+        "─── Fiscal & Réglementaire ───",
+        "─── Fiscal Quantitatif ───",   
     ],
     label_visibility="collapsed"
 )
@@ -334,7 +451,7 @@ elif page == "📊 Analyse Balance SYSCOHADA":
             st.session_state.bal_nom_fichier = fichier.name
 
         try:
-            df = pd.read_csv(fichier) if fichier.name.endswith(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu de la balance"):
                 st.dataframe(df, use_container_width=True)
@@ -383,7 +500,7 @@ elif page == "📋 Bilan SYSCOHADA":
             st.session_state.bil_nom_fichier = fichier.name
 
         try:
-            df = pd.read_csv(fichier) if fichier.name.endswith(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -447,7 +564,7 @@ elif page == "📈 Compte de Résultat":
             st.session_state.cr_nom_fichier = fichier.name
 
         try:
-            df = pd.read_csv(fichier) if fichier.name.endswith(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -512,7 +629,7 @@ elif page == "💰 TAFIRE":
             st.session_state.taf_nom_fichier = fichier.name
 
         try:
-            df = pd.read_csv(fichier) if fichier.name.endswith(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -576,7 +693,7 @@ elif page == "📎 Notes Annexes":
             st.session_state.notes_nom_fichier = fichier.name
 
         try:
-            df = pd.read_csv(fichier) if fichier.name.endswith(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -625,7 +742,7 @@ elif page == "🧾 Liasse Fiscale":
             st.session_state.liasse_nom_fichier = fichier.name
 
         try:
-            df = pd.read_csv(fichier) if fichier.name.endswith(".csv") else pd.read_excel(fichier)
+            df, erreur = charger_fichier(fichier)
 
             with st.expander("👀 Aperçu"):
                 st.dataframe(df, use_container_width=True)
@@ -734,7 +851,18 @@ elif page == "📰 Veille Fiscale UEMOA":
             telecharger_html("Veille_Fiscale_UEMOA", st.session_state.veille_resultat)
         with col2:
             telecharger_word("Veille_Fiscale_UEMOA", st.session_state.veille_resultat, pays=info_pays['nom'])
+# =============================================================================
+# PAGE : TABLEAU DE BORD FISCAL
+# =============================================================================
+elif page == "📊 Tableau de Bord Fiscal":
+    page_dashboard()
 
+# =============================================================================
+# PAGE : ANALYSE DU RISQUE FISCAL
+# =============================================================================
+elif page == "🚨 Analyse du Risque Fiscal":
+    page_risque_fiscal()
+            
 # =============================================================================
 # FOOTER
 # =============================================================================
