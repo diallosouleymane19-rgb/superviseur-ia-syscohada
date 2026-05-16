@@ -244,12 +244,10 @@ page = st.sidebar.selectbox(
         "🧾 Liasse Fiscale",
         "🔍 Plan Comptable OHADA",
         "📰 Veille Fiscale UEMOA",
-        "─── Fiscal Quantitatif ───"
-        separateurs = [
-    "─── États Financiers ───",
-    "─── Fiscal & Réglementaire ───",
-    "─── Fiscal Quantitatif ───",   
-]
+        "─── Fiscal Quantitatif ───",
+        "─── États Financiers ───",
+        "─── Fiscal & Réglementaire ───",
+        "─── Fiscal Quantitatif ───",   
     ],
     label_visibility="collapsed"
 )
