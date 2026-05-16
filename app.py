@@ -35,6 +35,7 @@ from data.plan_comptable_syscohada import (
 from auth import login, logout, is_connecte
 from utils.export_excel import export_etats_financiers_excel
 from utils.export_excel import export_etats_financiers_excel
+from smd_streamlit import page_dashboard, page_risque_fiscal
 
 # =============================================================================
 # INITIALISATION
@@ -243,6 +244,12 @@ page = st.sidebar.selectbox(
         "🧾 Liasse Fiscale",
         "🔍 Plan Comptable OHADA",
         "📰 Veille Fiscale UEMOA",
+        "─── Fiscal Quantitatif ───"
+        separateurs = [
+    "─── États Financiers ───",
+    "─── Fiscal & Réglementaire ───",
+    "─── Fiscal Quantitatif ───",   
+]
     ],
     label_visibility="collapsed"
 )
@@ -846,7 +853,18 @@ elif page == "📰 Veille Fiscale UEMOA":
             telecharger_html("Veille_Fiscale_UEMOA", st.session_state.veille_resultat)
         with col2:
             telecharger_word("Veille_Fiscale_UEMOA", st.session_state.veille_resultat, pays=info_pays['nom'])
+# =============================================================================
+# PAGE : TABLEAU DE BORD FISCAL
+# =============================================================================
+elif page == "📊 Tableau de Bord Fiscal":
+    page_dashboard()
 
+# =============================================================================
+# PAGE : ANALYSE DU RISQUE FISCAL
+# =============================================================================
+elif page == "🚨 Analyse du Risque Fiscal":
+    page_risque_fiscal()
+            
 # =============================================================================
 # FOOTER
 # =============================================================================
