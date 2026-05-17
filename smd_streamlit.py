@@ -1047,12 +1047,18 @@ def page_analyse_facture():
 
         # ── Rappel des comptes ────────────────────────────────────
         with st.expander("📌 Détail des comptes SYSCOHADA utilisés"):
+            est_achat    = (type_facture == "Facture d'achat (fournisseur)")
+            role_nature  = "Charge / Immobilisation" if est_achat else "Produit"
+            cpt_tva      = _COMPTES_TVA_DED if est_achat else _COMPTES_TVA_COL
+            lib_tva      = "TVA déductible sur achats" if est_achat else "TVA collectée sur ventes"
+            cpt_tiers    = _COMPTE_FOUR if est_achat else _COMPTE_CLIENT
+            lib_tiers    = "Fournisseurs" if est_achat else "Clients"
             st.markdown(f"""
 | N° Compte | Libellé | Rôle |
 |-----------|---------|------|
-| **{compte_nature}** | {libelle_nature} | {'Charge / Immobilisation' if type_facture == 'Facture d\'achat (fournisseur)' else 'Produit'} |
-| **{_COMPTES_TVA_DED if type_facture == "Facture d'achat (fournisseur)" else _COMPTES_TVA_COL}** | {'TVA déductible sur achats' if type_facture == "Facture d\'achat (fournisseur)" else 'TVA collectée sur ventes'} | TVA |
-| **{_COMPTE_FOUR if type_facture == "Facture d\'achat (fournisseur)" else _COMPTE_CLIENT}** | {'Fournisseurs' if type_facture == "Facture d\'achat (fournisseur)" else 'Clients'} | Tiers |
+| **{compte_nature}** | {libelle_nature} | {role_nature} |
+| **{cpt_tva}** | {lib_tva} | TVA |
+| **{cpt_tiers}** | {lib_tiers} | Tiers |
 """)
 
         # ── Exports ───────────────────────────────────────────────
@@ -1113,6 +1119,9 @@ if __name__ == "__main__":
     if module == "📊 Tableau de Bord Fiscal":
         page_dashboard()
     elif module == "🔍 Analyse du Risque Fiscal":
+        page_risque_fiscal()
+    else:
+        page_analyse_facture()
         page_risque_fiscal()
     else:
         page_analyse_facture()
