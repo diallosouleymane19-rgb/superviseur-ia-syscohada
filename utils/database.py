@@ -321,7 +321,7 @@ def creer_user(email: str, password: str, nom: str = "", cabinet: str = "", pays
             conn.close()
 
 
-def get_user_by_email(email: str) -> dict | None:
+def get_user_by_email(email: str):
     """Retourne les infos d'un utilisateur par email, ou None."""
     email = email.lower().strip()
     if _use_supabase():
@@ -359,7 +359,7 @@ def get_user_by_email(email: str) -> dict | None:
             conn.close()
 
 
-def verifier_mot_de_passe(email: str, password: str) -> dict | None:
+def verifier_mot_de_passe(email: str, password: str):
     """Vérifie email + mot de passe. Retourne le user dict si OK, None sinon."""
     import bcrypt
     user = get_user_by_email(email)

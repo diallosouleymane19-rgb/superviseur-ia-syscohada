@@ -33,6 +33,7 @@ from data.plan_comptable_syscohada import (
     get_pays_uemoa, get_info_pays, rechercher_comptes
 )
 from auth import login, logout, is_connecte
+from utils.database import creer_user
 from utils.export_excel import export_etats_financiers_excel
 from smd_streamlit import page_dashboard, page_risque_fiscal, page_analyse_facture
 from smd_calendar import page_calendrier_fiscal
@@ -122,7 +123,6 @@ if not is_connecte():
                 elif "@" not in s_email or "." not in s_email:
                     st.error("⚠️ Adresse email invalide.")
                 else:
-                    from utils.database import creer_user
                     result = creer_user(
                         email   = s_email,
                         password= s_pw,
