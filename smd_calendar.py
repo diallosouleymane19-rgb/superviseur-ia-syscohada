@@ -402,16 +402,6 @@ def page_calendrier_fiscal():
     # ── Tableau complet ───────────────────────────────────────────
     st.subheader("Toutes les echeances — " + NOMS_MOIS_FR[mois] + " " + str(annee))
 
-    def _couleur_ligne(row):
-        if row["Retard (jours)"] > 0:
-            return ["background-color:#f5c6cb"] * len(row)
-        elif row["Jours restants"] <= 3:
-            return ["background-color:#f5c6cb"] * len(row)
-        elif row["Jours restants"] <= 7:
-            return ["background-color:#ffd699"] * len(row)
-        else:
-            return ["background-color:#d4edda"] * len(row)
-
     df_aff = df.copy()
     df_aff["Echeance"] = df_aff["Echeance"].apply(lambda d: d.strftime("%d/%m/%Y"))
     df_aff["Statut"] = df.apply(
@@ -422,8 +412,21 @@ def page_calendrier_fiscal():
     )
 
     cols_aff = ["Statut", "Obligation", "Type", "Echeance", "Jours restants", "Administration", "Formulaire"]
+    df_display = df_aff[cols_aff].copy()
+
+    def _couleur_ligne(row):
+        s = row["Statut"]
+        if s == "RETARD":
+            return ["background-color:#f5c6cb"] * len(row)
+        elif s == "URGENT":
+            return ["background-color:#f5c6cb"] * len(row)
+        elif s == "BIENTOT":
+            return ["background-color:#ffd699"] * len(row)
+        else:
+            return ["background-color:#d4edda"] * len(row)
+
     st.dataframe(
-        df_aff[cols_aff].style.apply(_couleur_ligne, axis=1),
+        df_display.style.apply(_couleur_ligne, axis=1),
         use_container_width=True,
         hide_index=True,
         height=400
