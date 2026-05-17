@@ -40,6 +40,8 @@ from smd_calendar import page_calendrier_fiscal
 from smd_aging import page_balance_agee
 from smd_reconciliation import page_rapprochement_bancaire
 from smd_tresorerie import page_tresorerie_previsionnelle
+from smd_plan_financement import page_plan_financement
+from smd_tft import page_tft
 
 # =============================================================================
 # INITIALISATION
@@ -302,6 +304,8 @@ page = st.sidebar.selectbox(
         "💳 Balance Âgée Tiers",
         "🏦 Rapprochement Bancaire",
         "📊 Tresorerie Previsionnelle",
+        "📐 Plan de Financement",
+        "💹 TFT SYSCOHADA",
     ],
     label_visibility="collapsed"
 )
@@ -886,75 +890,4 @@ elif page == "📰 Veille Fiscale UEMOA":
     **Devise :** {info_pays['devise']}
     """)
 
-    if 'veille_resultat' not in st.session_state:
-        st.session_state.veille_resultat = None
-    if 'veille_pays' not in st.session_state:
-        st.session_state.veille_pays = None
-
-    # Réinitialiser si changement de pays
-    if st.session_state.get('veille_pays') != code_pays:
-        st.session_state.veille_resultat = None
-        st.session_state.veille_pays = code_pays
-
-    if st.button("📰 Obtenir la veille fiscale", type="primary", use_container_width=True):
-        with st.spinner("Génération de la veille fiscale en cours..."):
-            resultat = veille_fiscale_uemoa(code_pays)
-            st.session_state.veille_resultat = resultat
-
-    if st.session_state.veille_resultat:
-        st.markdown(st.session_state.veille_resultat)
-        st.divider()
-        col1, col2 = st.columns(2)
-        with col1:
-            telecharger_html("Veille_Fiscale_UEMOA", st.session_state.veille_resultat)
-        with col2:
-            telecharger_word("Veille_Fiscale_UEMOA", st.session_state.veille_resultat, pays=info_pays['nom'])
-# =============================================================================
-# PAGE : TABLEAU DE BORD FISCAL
-# =============================================================================
-elif page == "📅 Calendrier Fiscal UEMOA":
-    page_calendrier_fiscal()
-
-elif page == "📊 Tableau de Bord Fiscal":
-    page_dashboard()
-
-# =============================================================================
-# PAGE : ANALYSE DU RISQUE FISCAL
-# =============================================================================
-elif page == "🚨 Analyse du Risque Fiscal":
-    page_risque_fiscal()
-
-# =============================================================================
-# PAGE : ANALYSE FACTURE SYSCOHADA
-# =============================================================================
-elif page == "🧾 Analyse Facture SYSCOHADA":
-    page_analyse_facture()
-
-# =============================================================================
-# PAGE : BALANCE ÂGÉE TIERS
-# =============================================================================
-elif page == "💳 Balance Âgée Tiers":
-    page_balance_agee()
-
-# =============================================================================
-# PAGE : RAPPROCHEMENT BANCAIRE
-# =============================================================================
-elif page == "🏦 Rapprochement Bancaire":
-    page_rapprochement_bancaire()
-
-# =============================================================================
-# FOOTER
-# =============================================================================
-
-# ===========================================================================
-# PAGE : TRESORERIE PREVISIONNELLE
-# ===========================================================================
-elif page == "📊 Tresorerie Previsionnelle":
-    page_tresorerie_previsionnelle()
-
-st.divider()
-st.caption(
-    "**SMD Consulting** - Superviseur IA Comptable SYSCOHADA\n"
-    "Comptable Augmenté par Intelligence Artificielle — Normes OHADA/UEMOA\n"
-    "© 2026 - Souleymane Diallo"
-)
+    if 've
