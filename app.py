@@ -38,6 +38,7 @@ from utils.export_excel import export_etats_financiers_excel
 from smd_streamlit import page_dashboard, page_risque_fiscal, page_analyse_facture
 from smd_calendar import page_calendrier_fiscal
 from smd_aging import page_balance_agee
+from smd_reconciliation import page_rapprochement_bancaire
 
 # =============================================================================
 # INITIALISATION
@@ -252,6 +253,7 @@ page = st.sidebar.selectbox(
         "🚨 Analyse du Risque Fiscal",
         "🧾 Analyse Facture SYSCOHADA",
         "💳 Balance Âgée Tiers",
+        "🏦 Rapprochement Bancaire",
     ],
     label_visibility="collapsed"
 )
@@ -887,11 +889,18 @@ elif page == "💳 Balance Âgée Tiers":
     page_balance_agee()
 
 # =============================================================================
+# PAGE : RAPPROCHEMENT BANCAIRE
+# =============================================================================
+elif page == "🏦 Rapprochement Bancaire":
+    page_rapprochement_bancaire()
+
+# =============================================================================
 # FOOTER
 # =============================================================================
+
 st.divider()
-st.caption("""
-**SMD Consulting** - Superviseur IA Comptable SYSCOHADA  
-Comptable Augmenté par Intelligence Artificielle — Normes OHADA/UEMOA  
-© 2026 - Souleymane Diallo
-""")
+st.caption(
+    "**SMD Consulting** - Superviseur IA Comptable SYSCOHADA\n"
+    "Comptable Augmenté par Intelligence Artificielle — Normes OHADA/UEMOA\n"
+    "© 2026 - Souleymane Diallo"
+)
