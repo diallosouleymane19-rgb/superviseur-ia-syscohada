@@ -37,6 +37,7 @@ from utils.export_excel import export_etats_financiers_excel
 from utils.export_excel import export_etats_financiers_excel
 from smd_streamlit import page_dashboard, page_risque_fiscal, page_analyse_facture
 from smd_calendar import page_calendrier_fiscal
+from smd_aging import page_balance_agee
 
 # =============================================================================
 # INITIALISATION
@@ -250,6 +251,7 @@ page = st.sidebar.selectbox(
         "📊 Tableau de Bord Fiscal",
         "🚨 Analyse du Risque Fiscal",
         "🧾 Analyse Facture SYSCOHADA",
+        "💳 Balance Âgée Tiers",
     ],
     label_visibility="collapsed"
 )
@@ -877,7 +879,13 @@ elif page == "🚨 Analyse du Risque Fiscal":
 # =============================================================================
 elif page == "🧾 Analyse Facture SYSCOHADA":
     page_analyse_facture()
-            
+
+# =============================================================================
+# PAGE : BALANCE ÂGÉE TIERS
+# =============================================================================
+elif page == "💳 Balance Âgée Tiers":
+    page_balance_agee()
+
 # =============================================================================
 # FOOTER
 # =============================================================================
