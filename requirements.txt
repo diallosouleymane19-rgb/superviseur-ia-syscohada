@@ -10,3 +10,4 @@ PyPDF2
 python-dotenv
 pymupdf
 pdfplumber>=0.10.0
+xlrd>=2.0.0

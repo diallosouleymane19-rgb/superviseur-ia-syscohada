@@ -43,7 +43,7 @@ COMPTES_FOURNISSEURS = ["401", "4011", "4018"]
 def _detecter_colonnes(df: pd.DataFrame) -> dict:
     """Detecte automatiquement les colonnes pertinentes."""
     mapping = {}
-    cols_lower = {c.lower().strip(): c for c in df.columns}
+    cols_lower = {str(c).lower().strip(): c for c in df.columns}
 
     # Tiers / nom
     for k in ["tiers", "client", "fournisseur", "nom", "raison sociale", "libelle tiers", "name"]:
