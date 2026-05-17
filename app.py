@@ -35,7 +35,7 @@ from data.plan_comptable_syscohada import (
 from auth import login, logout, is_connecte
 from utils.export_excel import export_etats_financiers_excel
 from utils.export_excel import export_etats_financiers_excel
-from smd_streamlit import page_dashboard, page_risque_fiscal
+from smd_streamlit import page_dashboard, page_risque_fiscal, page_analyse_facture
 
 # =============================================================================
 # INITIALISATION
@@ -245,15 +245,19 @@ page = st.sidebar.selectbox(
         "🔍 Plan Comptable OHADA",
         "📰 Veille Fiscale UEMOA",
         "─── Fiscal Quantitatif ───",
-        "─── États Financiers ───",
-        "─── Fiscal & Réglementaire ───",
-        "─── Fiscal Quantitatif ───",   
+        "📊 Tableau de Bord Fiscal",
+        "🚨 Analyse du Risque Fiscal",
+        "🧾 Analyse Facture SYSCOHADA",
     ],
     label_visibility="collapsed"
 )
 
 # Neutraliser les séparateurs
-separateurs = ["─── États Financiers ───", "─── Fiscal & Réglementaire ───"]
+separateurs = [
+    "─── États Financiers ───",
+    "─── Fiscal & Réglementaire ───",
+    "─── Fiscal Quantitatif ───",
+]
 if page in separateurs:
     page = "🏠 Accueil"
 
@@ -862,6 +866,12 @@ elif page == "📊 Tableau de Bord Fiscal":
 # =============================================================================
 elif page == "🚨 Analyse du Risque Fiscal":
     page_risque_fiscal()
+
+# =============================================================================
+# PAGE : ANALYSE FACTURE SYSCOHADA
+# =============================================================================
+elif page == "🧾 Analyse Facture SYSCOHADA":
+    page_analyse_facture()
             
 # =============================================================================
 # FOOTER

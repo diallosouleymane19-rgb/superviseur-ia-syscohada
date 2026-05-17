@@ -753,6 +753,339 @@ def _info_controle():
 
 
 # ─────────────────────────────────────────────
+#  PAGE : ANALYSE FACTURE SYSCOHADA
+# ─────────────────────────────────────────────
+
+# Référentiel d'imputation SYSCOHADA par nature de charge/produit
+_CHARGES_SYSCOHADA = {
+    "Marchandises (achat pour revente)":         ("601", "Achats de marchandises"),
+    "Matières premières":                         ("602", "Achats de matières premières"),
+    "Fournitures de bureau / consommables":       ("6052", "Fournitures de bureau"),
+    "Carburant / lubrifiant":                     ("6053", "Fournitures d'entretien et de petit équipement"),
+    "Sous-traitance générale":                    ("604", "Achats d'études et prestations de services"),
+    "Loyer / location immobilier":                ("6221", "Loyers et charges locatives"),
+    "Électricité / eau / gaz":                   ("6053", "Eau, électricité, gaz"),
+    "Téléphone / internet":                       ("6252", "Frais de téléphone et internet"),
+    "Transport / fret":                           ("624", "Transports de biens et transports collectifs"),
+    "Honoraires (expert-comptable, avocat...)":   ("6221", "Honoraires"),
+    "Publicité / communication":                  ("627", "Publicité, publications, relations publiques"),
+    "Assurances":                                 ("625", "Primes d'assurances"),
+    "Frais bancaires":                            ("671", "Frais bancaires"),
+    "Matériel informatique (immobilisation)":     ("244", "Matériel informatique"),
+    "Mobilier / matériel de bureau (immo.)":      ("244", "Matériel et mobilier de bureau"),
+    "Véhicule (immobilisation)":                  ("245", "Matériel de transport"),
+    "Travaux / aménagements (immo.)":             ("232", "Agencements et installations"),
+    "Salaires et traitements":                    ("661", "Rémunérations directes versées"),
+    "Autre charge (préciser en libellé)":         ("658", "Autres charges diverses"),
+}
+
+_PRODUITS_SYSCOHADA = {
+    "Ventes de marchandises":                     ("701", "Ventes de marchandises"),
+    "Ventes de produits finis":                   ("702", "Ventes de produits finis"),
+    "Prestations de services":                    ("706", "Services vendus"),
+    "Travaux facturés":                           ("703", "Travaux facturés"),
+    "Loyers perçus":                              ("771", "Revenus des immeubles"),
+    "Produits financiers (intérêts)":             ("772", "Revenus des valeurs mobilières"),
+    "Autre produit (préciser en libellé)":        ("758", "Autres produits divers"),
+}
+
+_COMPTES_TVA_COL  = "4431"   # TVA collectée (ventes)
+_COMPTES_TVA_DED  = "4454"   # TVA déductible (achats)
+_COMPTE_FOUR      = "401"    # Fournisseurs
+_COMPTE_CLIENT    = "411"    # Clients
+
+
+def _generer_excel_facture(lignes: list, meta: dict) -> BytesIO:
+    """Génère un fichier Excel avec le journal de la facture."""
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Journal Facture"
+
+    bleu  = "1A5276"
+    blanc = "FFFFFF"
+    gris  = "F2F2F2"
+
+    # En-tête document
+    ws.merge_cells("A1:G1")
+    ws["A1"] = f"ANALYSE FACTURE — {meta.get('entreprise','').upper()}"
+    ws["A1"].font = Font(bold=True, color=blanc, size=13)
+    ws["A1"].fill = PatternFill("solid", fgColor=bleu)
+    ws["A1"].alignment = Alignment(horizontal="center")
+
+    ws.merge_cells("A2:G2")
+    ws["A2"] = f"Facture N° {meta.get('num_facture','')} — {meta.get('date_facture','')} — {meta.get('pays','')}"
+    ws["A2"].font = Font(italic=True)
+    ws["A2"].alignment = Alignment(horizontal="center")
+
+    # En-têtes colonnes
+    headers = ["Date", "Journal", "N° Compte", "Libellé", "Débit (FCFA)", "Crédit (FCFA)", "Ref. Facture"]
+    for col, h in enumerate(headers, 1):
+        c = ws.cell(row=4, column=col, value=h)
+        c.font = Font(bold=True, color=blanc)
+        c.fill = PatternFill("solid", fgColor=bleu)
+        c.alignment = Alignment(horizontal="center")
+
+    # Lignes d'écriture
+    thin = Border(
+        left=Side(style="thin"), right=Side(style="thin"),
+        top=Side(style="thin"),  bottom=Side(style="thin")
+    )
+    for i, ligne in enumerate(lignes):
+        row = 5 + i
+        fill = PatternFill("solid", fgColor=gris) if i % 2 == 0 else PatternFill("solid", fgColor="FFFFFF")
+        vals = [ligne.get("date"), ligne.get("journal"), ligne.get("compte"),
+                ligne.get("libelle"), ligne.get("debit"), ligne.get("credit"),
+                ligne.get("ref")]
+        for col, v in enumerate(vals, 1):
+            c = ws.cell(row=row, column=col, value=v)
+            c.fill = fill
+            c.border = thin
+            if col in (5, 6) and isinstance(v, (int, float)):
+                c.number_format = "#,##0"
+
+    # Totaux
+    row_total = 5 + len(lignes)
+    ws.cell(row=row_total, column=4, value="TOTAL").font = Font(bold=True)
+    total_deb = sum(l.get("debit", 0) or 0 for l in lignes)
+    total_cre = sum(l.get("credit", 0) or 0 for l in lignes)
+    ws.cell(row=row_total, column=5, value=total_deb).font = Font(bold=True)
+    ws.cell(row=row_total, column=6, value=total_cre).font = Font(bold=True)
+
+    # Largeurs
+    for col, w in zip("ABCDEFG", [12, 10, 14, 40, 18, 18, 16]):
+        ws.column_dimensions[col].width = w
+
+    buf = BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+    return buf
+
+
+def _generer_word_facture(lignes: list, meta: dict) -> BytesIO:
+    """Génère un rapport Word de l'analyse facture."""
+    from docx import Document
+    from docx.shared import Pt, RGBColor, Cm
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.enum.table import WD_ALIGN_VERTICAL
+
+    doc = Document()
+    # Marges
+    for section in doc.sections:
+        section.top_margin    = Cm(2)
+        section.bottom_margin = Cm(2)
+        section.left_margin   = Cm(2.5)
+        section.right_margin  = Cm(2.5)
+
+    # Titre
+    titre = doc.add_heading("ANALYSE FACTURE — SYSCOHADA", level=1)
+    titre.runs[0].font.color.rgb = RGBColor(0x1A, 0x52, 0x76)
+
+    # Méta
+    doc.add_paragraph(f"Entreprise   : {meta.get('entreprise','')}")
+    doc.add_paragraph(f"Facture N°   : {meta.get('num_facture','')}  |  Date : {meta.get('date_facture','')}")
+    doc.add_paragraph(f"Fournisseur/Client : {meta.get('tiers','')}  |  Pays : {meta.get('pays','')}")
+    doc.add_paragraph(f"Type         : {meta.get('type_facture','')}  |  Nature : {meta.get('nature','')}")
+    doc.add_paragraph(f"Montant HT   : {_fmt(meta.get('ht',0))}  |  TVA ({meta.get('taux_tva',0)}%) : {_fmt(meta.get('tva',0))}  |  TTC : {_fmt(meta.get('ttc',0))}")
+    doc.add_paragraph("")
+
+    doc.add_heading("ÉCRITURE COMPTABLE (Journal SYSCOHADA)", level=2)
+
+    # Tableau
+    table = doc.add_table(rows=1, cols=5)
+    table.style = "Table Grid"
+    hdr = table.rows[0].cells
+    for i, h in enumerate(["N° Compte", "Libellé", "Débit (FCFA)", "Crédit (FCFA)", "Ref."]):
+        hdr[i].text = h
+        hdr[i].paragraphs[0].runs[0].font.bold = True
+
+    for ligne in lignes:
+        row = table.add_row().cells
+        row[0].text = str(ligne.get("compte", ""))
+        row[1].text = str(ligne.get("libelle", ""))
+        row[2].text = f"{ligne.get('debit', '') or '':,.0f}".replace(",", " ") if ligne.get("debit") else ""
+        row[3].text = f"{ligne.get('credit', '') or '':,.0f}".replace(",", " ") if ligne.get("credit") else ""
+        row[4].text = str(ligne.get("ref", ""))
+
+    doc.add_paragraph("")
+    doc.add_heading("RAPPEL DES RÈGLES D'IMPUTATION SYSCOHADA", level=2)
+    if meta.get("type_facture") == "Facture d'achat (fournisseur)":
+        doc.add_paragraph("• Classe 6 (charges) ou Classe 2 (immobilisations) au DÉBIT")
+        doc.add_paragraph(f"• Compte {_COMPTES_TVA_DED} — TVA déductible au DÉBIT (si assujetti TVA)")
+        doc.add_paragraph(f"• Compte {_COMPTE_FOUR} — Fournisseurs au CRÉDIT (dette fournisseur)")
+    else:
+        doc.add_paragraph("• Classe 4 — Clients (411) au DÉBIT (créance client)")
+        doc.add_paragraph("• Classe 7 (produits) au CRÉDIT")
+        doc.add_paragraph(f"• Compte {_COMPTES_TVA_COL} — TVA collectée au CRÉDIT (si assujetti TVA)")
+
+    doc.add_paragraph("")
+    doc.add_paragraph("SMD Consulting — Superviseur IA Comptable & Fiscal UEMOA/OHADA", style="Caption")
+
+    buf = BytesIO()
+    doc.save(buf)
+    buf.seek(0)
+    return buf
+
+
+def page_analyse_facture():
+    """Page Streamlit : Analyse et imputation comptable d'une facture SYSCOHADA."""
+    _inject_css()
+
+    st.title("🧾 Analyse Facture — Imputation SYSCOHADA")
+    st.markdown("Saisissez les informations de votre facture. L'assistant génère l'écriture comptable conforme au Plan Comptable SYSCOHADA.")
+    st.divider()
+
+    # ── Formulaire de saisie ──────────────────────────────────────
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("📋 Informations générales")
+        entreprise   = st.text_input("Nom de l'entreprise", placeholder="DARLING SARL")
+        tiers        = st.text_input("Fournisseur / Client", placeholder="SOCIÉTÉ ABC")
+        num_facture  = st.text_input("N° de facture", placeholder="F-2025-001")
+        date_facture = st.date_input("Date de la facture")
+        pays         = st.selectbox("Pays UEMOA", list(PAYS_UEMOA.keys()))
+
+    with col2:
+        st.subheader("💰 Détails financiers")
+        type_facture = st.selectbox("Type de facture", [
+            "Facture d'achat (fournisseur)",
+            "Facture de vente (client)",
+        ])
+        if type_facture == "Facture d'achat (fournisseur)":
+            catalogue = _CHARGES_SYSCOHADA
+            label_nature = "Nature de la charge / immobilisation"
+        else:
+            catalogue = _PRODUITS_SYSCOHADA
+            label_nature = "Nature du produit / service vendu"
+
+        nature   = st.selectbox(label_nature, list(catalogue.keys()))
+        libelle_libre = st.text_input("Libellé libre (optionnel)", placeholder="Ex: Loyer bureau Dakar nov. 2025")
+        montant_ht    = st.number_input("Montant HT (FCFA)", min_value=0.0, step=1000.0, format="%.0f")
+        taux_tva_pays = PAYS_UEMOA[pays]["tva_taux"]
+        assujetti_tva = st.checkbox(f"Assujetti à la TVA ({taux_tva_pays:.0f}% — {pays})", value=True)
+        if assujetti_tva:
+            taux_tva = st.number_input("Taux TVA (%)", value=taux_tva_pays, min_value=0.0, max_value=30.0, step=0.5)
+        else:
+            taux_tva = 0.0
+
+    # ── Calculs ──────────────────────────────────────────────────
+    montant_tva = round(montant_ht * taux_tva / 100, 0)
+    montant_ttc = montant_ht + montant_tva
+
+    st.divider()
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Montant HT",  _fmt(montant_ht))
+    c2.metric(f"TVA ({taux_tva:.0f}%)", _fmt(montant_tva))
+    c3.metric("Montant TTC", _fmt(montant_ttc))
+
+    # ── Génération de l'écriture ─────────────────────────────────
+    if st.button("📒 Générer l'écriture comptable", type="primary", use_container_width=True):
+        if montant_ht <= 0:
+            st.warning("⚠️ Veuillez saisir un montant HT supérieur à 0.")
+            st.stop()
+
+        compte_nature, libelle_nature = catalogue[nature]
+        libelle_ecriture = libelle_libre if libelle_libre else libelle_nature
+        ref = num_facture or "FA-001"
+        date_str = date_facture.strftime("%d/%m/%Y")
+
+        # Construction des lignes du journal
+        lignes = []
+
+        if type_facture == "Facture d'achat (fournisseur)":
+            # DÉBIT : compte charge/immo
+            lignes.append({"date": date_str, "journal": "ACH", "compte": compte_nature,
+                            "libelle": libelle_ecriture, "debit": montant_ht, "credit": None, "ref": ref})
+            # DÉBIT : TVA déductible (si assujetti)
+            if assujetti_tva and montant_tva > 0:
+                lignes.append({"date": date_str, "journal": "ACH", "compte": _COMPTES_TVA_DED,
+                                "libelle": f"TVA déductible — {libelle_ecriture}",
+                                "debit": montant_tva, "credit": None, "ref": ref})
+            # CRÉDIT : fournisseur
+            lignes.append({"date": date_str, "journal": "ACH", "compte": _COMPTE_FOUR,
+                            "libelle": f"Fournisseur — {tiers}", "debit": None,
+                            "credit": montant_ttc, "ref": ref})
+        else:
+            # DÉBIT : client
+            lignes.append({"date": date_str, "journal": "VTE", "compte": _COMPTE_CLIENT,
+                            "libelle": f"Client — {tiers}", "debit": montant_ttc,
+                            "credit": None, "ref": ref})
+            # CRÉDIT : produit
+            lignes.append({"date": date_str, "journal": "VTE", "compte": compte_nature,
+                            "libelle": libelle_ecriture, "debit": None,
+                            "credit": montant_ht, "ref": ref})
+            # CRÉDIT : TVA collectée (si assujetti)
+            if assujetti_tva and montant_tva > 0:
+                lignes.append({"date": date_str, "journal": "VTE", "compte": _COMPTES_TVA_COL,
+                                "libelle": f"TVA collectée — {libelle_ecriture}",
+                                "debit": None, "credit": montant_tva, "ref": ref})
+
+        # Vérification équilibre
+        total_deb = sum(l["debit"]  or 0 for l in lignes)
+        total_cre = sum(l["credit"] or 0 for l in lignes)
+        equilibre = abs(total_deb - total_cre) < 1
+
+        # ── Affichage tableau ─────────────────────────────────────
+        st.subheader("📒 Écriture comptable SYSCOHADA")
+        df_journal = pd.DataFrame(lignes)[["date","journal","compte","libelle","debit","credit","ref"]]
+        df_journal.columns = ["Date", "Journal", "N° Compte", "Libellé", "Débit", "Crédit", "Réf."]
+        st.dataframe(
+            df_journal.style.format({
+                "Débit":  lambda x: f"{x:,.0f}".replace(",", " ") if pd.notna(x) else "",
+                "Crédit": lambda x: f"{x:,.0f}".replace(",", " ") if pd.notna(x) else "",
+            }),
+            use_container_width=True, hide_index=True
+        )
+
+        # Équilibre
+        if equilibre:
+            st.success(f"✅ Écriture équilibrée — Débit = Crédit = **{_fmt(total_deb)}**")
+        else:
+            st.error(f"❌ Déséquilibre détecté : Débit {_fmt(total_deb)} ≠ Crédit {_fmt(total_cre)}")
+
+        # ── Rappel des comptes ────────────────────────────────────
+        with st.expander("📌 Détail des comptes SYSCOHADA utilisés"):
+            st.markdown(f"""
+| N° Compte | Libellé | Rôle |
+|-----------|---------|------|
+| **{compte_nature}** | {libelle_nature} | {'Charge / Immobilisation' if type_facture == 'Facture d\'achat (fournisseur)' else 'Produit'} |
+| **{_COMPTES_TVA_DED if type_facture == "Facture d'achat (fournisseur)" else _COMPTES_TVA_COL}** | {'TVA déductible sur achats' if type_facture == "Facture d\'achat (fournisseur)" else 'TVA collectée sur ventes'} | TVA |
+| **{_COMPTE_FOUR if type_facture == "Facture d\'achat (fournisseur)" else _COMPTE_CLIENT}** | {'Fournisseurs' if type_facture == "Facture d\'achat (fournisseur)" else 'Clients'} | Tiers |
+""")
+
+        # ── Exports ───────────────────────────────────────────────
+        st.divider()
+        st.subheader("📥 Télécharger l'écriture")
+        meta = {
+            "entreprise": entreprise, "tiers": tiers, "num_facture": num_facture,
+            "date_facture": date_str, "pays": pays, "type_facture": type_facture,
+            "nature": nature, "ht": montant_ht, "tva": montant_tva,
+            "ttc": montant_ttc, "taux_tva": taux_tva,
+        }
+        col_xl, col_wd = st.columns(2)
+        with col_xl:
+            buf_xl = _generer_excel_facture(lignes, meta)
+            st.download_button(
+                "📊 Télécharger Excel",
+                data=buf_xl,
+                file_name=f"Facture_{num_facture or 'analyse'}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+            )
+        with col_wd:
+            buf_wd = _generer_word_facture(lignes, meta)
+            st.download_button(
+                "📄 Télécharger Word",
+                data=buf_wd,
+                file_name=f"Facture_{num_facture or 'analyse'}.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                use_container_width=True,
+            )
+
+
+# ─────────────────────────────────────────────
 #  APP STANDALONE (test rapide)
 # ─────────────────────────────────────────────
 if __name__ == "__main__":
@@ -769,7 +1102,7 @@ if __name__ == "__main__":
         st.markdown("---")
         module = st.radio(
             "🗂️ Module",
-            ["📊 Tableau de Bord Fiscal", "🔍 Analyse du Risque Fiscal"],
+            ["📊 Tableau de Bord Fiscal", "🔍 Analyse du Risque Fiscal", "🧾 Analyse Facture"],
             label_visibility="collapsed"
         )
         st.markdown("---")
@@ -779,5 +1112,7 @@ if __name__ == "__main__":
 
     if module == "📊 Tableau de Bord Fiscal":
         page_dashboard()
-    else:
+    elif module == "🔍 Analyse du Risque Fiscal":
         page_risque_fiscal()
+    else:
+        page_analyse_facture()
