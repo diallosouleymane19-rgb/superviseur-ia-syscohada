@@ -1122,6 +1122,3 @@ if __name__ == "__main__":
         page_risque_fiscal()
     else:
         page_analyse_facture()
-        page_risque_fiscal()
-    else:
-        page_analyse_facture()
