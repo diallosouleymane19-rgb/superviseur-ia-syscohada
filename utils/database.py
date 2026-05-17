@@ -265,3 +265,109 @@ def supprimer_analyse(analyse_id):
         conn = sqlite3.connect(DB_PATH)
         conn.execute("DELETE FROM analyses WHERE id=?", (analyse_id,))
         conn.commit(); conn.close()
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# GESTION DES UTILISATEURS
+# ════════════════════════════════════════════════════════════════════════════
+
+def creer_user(email: str, password: str, nom: str = "", cabinet: str = "", pays: str = "") -> dict:
+    """Crée un nouvel utilisateur avec mot de passe hashé. Retourne {"ok": True} ou {"error": "..."}"""
+    import bcrypt
+    # Vérifier si l'email existe déjà
+    existant = get_user_by_email(email)
+    if existant:
+        return {"error": "Cet email est déjà enregistré."}
+
+    pw_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    date_i  = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    if _use_supabase():
+        payload = {
+            "email": email.lower().strip(),
+            "password_hash": pw_hash,
+            "nom": nom, "cabinet": cabinet, "pays": pays,
+            "role": "client", "is_active": True,
+            "date_inscription": date_i
+        }
+        r = requests.post(_sb_url("users"), json=payload, headers=_headers())
+        if r.status_code in (200, 201):
+            return {"ok": True}
+        return {"error": f"Erreur serveur ({r.status_code}). Réessayez."}
+    else:
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
+        try:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    email TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    nom TEXT, cabinet TEXT, pays TEXT,
+                    role TEXT DEFAULT 'client',
+                    is_active INTEGER DEFAULT 1,
+                    date_inscription TEXT
+                )
+            """)
+            conn.execute("""
+                INSERT INTO users (email, password_hash, nom, cabinet, pays, role, is_active, date_inscription)
+                VALUES (?, ?, ?, ?, ?, 'client', 1, ?)
+            """, (email.lower().strip(), pw_hash, nom, cabinet, pays, date_i))
+            conn.commit()
+            return {"ok": True}
+        except sqlite3.IntegrityError:
+            return {"error": "Cet email est déjà enregistré."}
+        finally:
+            conn.close()
+
+
+def get_user_by_email(email: str) -> dict | None:
+    """Retourne les infos d'un utilisateur par email, ou None."""
+    email = email.lower().strip()
+    if _use_supabase():
+        r = requests.get(
+            _sb_url("users"),
+            headers=_headers(),
+            params={"email": f"eq.{email}", "is_active": "eq.true"}
+        )
+        if r.status_code == 200 and r.json():
+            return r.json()[0]
+        return None
+    else:
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
+        try:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    email TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    nom TEXT, cabinet TEXT, pays TEXT,
+                    role TEXT DEFAULT 'client',
+                    is_active INTEGER DEFAULT 1,
+                    date_inscription TEXT
+                )
+            """)
+            row = conn.execute(
+                "SELECT * FROM users WHERE email=? AND is_active=1", (email,)
+            ).fetchone()
+            if row:
+                cols = ["id","email","password_hash","nom","cabinet","pays","role","is_active","date_inscription"]
+                return dict(zip(cols, row))
+            return None
+        finally:
+            conn.close()
+
+
+def verifier_mot_de_passe(email: str, password: str) -> dict | None:
+    """Vérifie email + mot de passe. Retourne le user dict si OK, None sinon."""
+    import bcrypt
+    user = get_user_by_email(email)
+    if not user:
+        return None
+    try:
+        if bcrypt.checkpw(password.encode("utf-8"), user["password_hash"].encode("utf-8")):
+            return user
+    except Exception:
+        pass
+    return None

@@ -57,40 +57,87 @@ st.set_page_config(
 # =============================================================================
 if not is_connecte():
     st.title("🔒 Superviseur IA Comptable SYSCOHADA")
-    st.subheader("Accès réservé — Normes OHADA/UEMOA")
+    st.subheader("Normes OHADA/UEMOA — Cabinets & PME/TPE")
+
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown("---")
         st.markdown("""
         <div style='background:#f0fdf4;padding:12px;border-radius:8px;margin-bottom:10px;font-size:0.85em'>
-        ✅ <b>Données anonymisées</b> — SIRET/NIF masqués, noms supprimés<br>
-        ✅ <b>Non stockées</b> — Aucune conservation après analyse<br>
-        ✅ <b>Non utilisées pour entraîner l'IA</b> — Politique Mistral garantie
+        ✅ <b>Données sécurisées</b> — Hébergées sur Supabase (UE)<br>
+        ✅ <b>IA Mistral</b> — Données non utilisées pour l'entraînement<br>
+        ✅ <b>Normes SYSCOHADA</b> — 8 pays UEMOA couverts
         </div>
         """, unsafe_allow_html=True)
-        st.markdown("---")
-        email = st.text_input("📧 Email professionnel", placeholder="contact@cabinet.com")
-        password = st.text_input("🔑 Mot de passe", type="password")
-        if st.button("🚀 Se connecter", type="primary", use_container_width=True):
-            if login(email, password):
-                st.success("✅ Connexion réussie !")
+
+        # ── Onglets Connexion / Inscription ───────────────────────────────
+        tab_login, tab_signup = st.tabs(["🔑 Se connecter", "📝 Créer un compte"])
+
+        # ── CONNEXION ─────────────────────────────────────────────────────
+        with tab_login:
+            st.markdown("")
+            email_l    = st.text_input("📧 Email", placeholder="contact@cabinet.com", key="login_email")
+            password_l = st.text_input("🔑 Mot de passe", type="password", key="login_pw")
+            if st.button("🚀 Se connecter", type="primary", use_container_width=True):
+                if login(email_l, password_l):
+                    st.success("✅ Connexion réussie !")
+                    st.rerun()
+                else:
+                    st.error("❌ Email ou mot de passe incorrect")
+            st.markdown("---")
+            st.markdown("##### 🎯 Tester sans inscription")
+            if st.button("👀 Accès Démonstration", use_container_width=True, key="btn_demo"):
+                st.session_state["authenticated"] = True
+                st.session_state["user_email"]    = "demo@smdconsulting.pro"
+                st.session_state["role"]          = "demo"
+                st.session_state["nom"]           = "Démonstration"
+                st.session_state["cabinet"]       = "Demo"
+                st.session_state["login_time"]    = datetime.now().isoformat()
                 st.rerun()
-            else:
-                st.error("❌ Email ou mot de passe incorrect")
+
+        # ── INSCRIPTION ───────────────────────────────────────────────────
+        with tab_signup:
+            st.markdown("")
+            from data.plan_comptable_syscohada import FISCALITE_UEMOA
+            pays_opts = {v["nom"]: k for k, v in FISCALITE_UEMOA.items()}
+
+            with st.form("form_inscription"):
+                s_email    = st.text_input("📧 Email professionnel *", placeholder="contact@cabinet.com")
+                s_nom      = st.text_input("👤 Nom complet *",          placeholder="Souleymane Diallo")
+                s_cabinet  = st.text_input("🏢 Cabinet / Entreprise *", placeholder="Cabinet SMD")
+                s_pays     = st.selectbox("🌍 Pays", list(pays_opts.keys()))
+                s_pw       = st.text_input("🔑 Mot de passe *",  type="password",
+                                           help="8 caractères minimum")
+                s_pw2      = st.text_input("🔑 Confirmer le mot de passe *", type="password")
+                submitted  = st.form_submit_button("✅ Créer mon compte", use_container_width=True,
+                                                   type="primary")
+
+            if submitted:
+                # Validations
+                if not all([s_email, s_nom, s_cabinet, s_pw, s_pw2]):
+                    st.error("⚠️ Tous les champs obligatoires (*) doivent être remplis.")
+                elif len(s_pw) < 8:
+                    st.error("⚠️ Le mot de passe doit faire au moins 8 caractères.")
+                elif s_pw != s_pw2:
+                    st.error("⚠️ Les mots de passe ne correspondent pas.")
+                elif "@" not in s_email or "." not in s_email:
+                    st.error("⚠️ Adresse email invalide.")
+                else:
+                    from utils.database import creer_user
+                    result = creer_user(
+                        email   = s_email,
+                        password= s_pw,
+                        nom     = s_nom,
+                        cabinet = s_cabinet,
+                        pays    = s_pays
+                    )
+                    if result.get("ok"):
+                        st.success(f"🎉 Compte créé ! Connectez-vous avec **{s_email}**")
+                        st.balloons()
+                    else:
+                        st.error(f"❌ {result.get('error', 'Erreur inconnue')}")
 
         st.markdown("---")
-
-        st.markdown("##### 🎯 Vous souhaitez tester l'application ?")
-        if st.button("👀 Accès Démonstration", use_container_width=True, key="btn_demo"):
-            st.session_state["authenticated"] = True
-            st.session_state["user_email"] = "demo@smdconsulting.pro"
-            st.session_state["role"] = "demo"
-            st.session_state["nom"] = "Démonstration"
-            st.session_state["login_time"] = datetime.now().isoformat()
-            st.rerun()
-
-        st.caption("📧 Demander un accès : contact@smdconsulting.pro")
-        st.markdown("---")
+        st.caption("📧 Support : contact@smdconsulting.pro")
 
     st.divider()
     st.caption("SMD Consulting © 2026 - Comptable IA Augmenté SYSCOHADA")
