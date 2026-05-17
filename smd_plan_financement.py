@@ -361,21 +361,26 @@ def page_plan_financement():
                 use_container_width=True
             )
         with col_x2:
-            # Export HTML simple
-            html = f"""<html><head><meta charset='UTF-8'>
-            <title>Plan de Financement {entreprise}</title>
-            <style>body{{font-family:Arial;margin:40px}}
-            h1{{color:#1E8449}} table{{border-collapse:collapse;width:100%}}
-            th{{background:#1E8449;color:white;padding:8px}} td{{border:1px solid #ddd;padding:6px}}
-            </style></head><body>
-            <h1>Plan de Financement SYSCOHADA</h1>
-            <p><b>Entreprise :</b> {entreprise or 'N/A'} | <b>Période :</b> {annees[0]}–{annees[-1]} | <b>Devise :</b> {devise}</p>
-            <h2>Ressources</h2>{df_r_edit.style.format('{{:,.0f}}').to_html()}
-            <h2>Emplois</h2>{df_e_edit.style.format('{{:,.0f}}').to_html()}
-            </body></html>"""
-            import base64
-            b64 = base64.b64encode(html.encode()).decode()
-            st.markdown(
-                f'<a href="data:text/html;base64,{b64}" download="Plan_Financement.html">'
-                f'📄 Télécharger HTML</a>'
+            _ent     = entreprise or "N/A"
+            _periode = annees[0] + "-" + annees[-1]
+            html_str = (
+                "<html><head><meta charset='UTF-8'>"
+                "<style>body{font-family:Arial;margin:40px}"
+                "h1{color:#1E8449}table{border-collapse:collapse;width:100%}"
+                "th{background:#1E8449;color:white;padding:8px}"
+                "td{border:1px solid #ddd;padding:6px}</style></head><body>"
+                "<h1>Plan de Financement SYSCOHADA</h1>"
+                "<p><b>Entreprise :</b> " + _ent +
+                " | <b>Periode :</b> " + _periode +
+                " | <b>Devise :</b> " + devise + "</p>"
+                "<h2>Ressources</h2>" + df_r_edit.to_html() +
+                "<h2>Emplois</h2>" + df_e_edit.to_html() +
+                "</body></html>"
+            )
+            st.download_button(
+                "📄 Télécharger HTML",
+                html_str.encode("utf-8"),
+                f"Plan_Financement_{_ent}_{_periode}.html",
+                mime="text/html",
+                    use_container_width=True
             )
