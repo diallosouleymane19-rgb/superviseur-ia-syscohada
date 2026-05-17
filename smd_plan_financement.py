@@ -239,8 +239,9 @@ def page_plan_financement():
             if vals:
                 prefill_r["Capacité d'autofinancement (CAF)"] = vals.get("CAF estimée", 0)
                 prefill_e["Variation du besoin en fonds de roulement (BFR)"] = vals.get("Variation BFR estimée", 0)
-                st.success(f"✅ CAF estimée : {prefill_r.get(\"Capacité d'autofinancement (CAF)\", 0):,.0f} {devise} | "
-                           f"BFR estimé : {prefill_e.get('Variation du besoin en fonds de roulement (BFR)', 0):,.0f} {devise}")
+                _caf_val = prefill_r.get("Capacité d'autofinancement (CAF)", 0)
+                _bfr_val = prefill_e.get("Variation du besoin en fonds de roulement (BFR)", 0)
+                st.success(f"✅ CAF estimée : {_caf_val:,.0f} {devise} | BFR estimé : {_bfr_val:,.0f} {devise}")
             else:
                 st.warning("⚠️ Impossible d'extraire automatiquement — vérifiez les colonnes (Compte, Solde).")
 
@@ -376,5 +377,5 @@ def page_plan_financement():
             b64 = base64.b64encode(html.encode()).decode()
             st.markdown(
                 f'<a href="data:text/html;base64,{b64}" download="Plan_Financement.html">'
-                f'📄 Télécharger HTML</a>', unsafe_allow_html=True
+                f'📄 Télécharger HTML</a>'
             )

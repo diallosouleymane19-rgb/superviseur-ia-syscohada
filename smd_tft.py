@@ -207,14 +207,19 @@ def _analyser_tft_ia(resultats, exercices, devise, entreprise):
     from utils.ai import appel_mistral
 
     lignes = []
+    _k_inv  = "FLUX NET DE TRÉSORERIE — ACTIVITÉS D'INVESTISSEMENT (II)"
+    _k_clot = "TRÉSORERIE À LA CLÔTURE DE L'EXERCICE"
     for ex in exercices:
         r = resultats[ex]
+        _op  = r["FLUX NET DE TRÉSORERIE — ACTIVITÉS OPÉRATIONNELLES (I)"]
+        _inv = r[_k_inv]
+        _fin = r["FLUX NET DE TRÉSORERIE — ACTIVITÉS DE FINANCEMENT (III)"]
+        _var = r["VARIATION NETTE DE TRÉSORERIE (I + II + III)"]
+        _clo = r[_k_clot]
         lignes.append(
-            f"  {ex} : Op={r['FLUX NET DE TRÉSORERIE — ACTIVITÉS OPÉRATIONNELLES (I)']:+,.0f} | "
-            f"Inv={r['FLUX NET DE TRÉSORERIE — ACTIVITÉS D\\'INVESTISSEMENT (II)']:+,.0f} | "
-            f"Fin={r['FLUX NET DE TRÉSORERIE — ACTIVITÉS DE FINANCEMENT (III)']:+,.0f} | "
-            f"Var={r['VARIATION NETTE DE TRÉSORERIE (I + II + III)']:+,.0f} | "
-            f"Tréso clôture={r['TRÉSORERIE À LA CLÔTURE DE L\\'EXERCICE']:,.0f} {devise}"
+            f"  {ex} : Op={_op:+,.0f} | Inv={_inv:+,.0f} | "
+            f"Fin={_fin:+,.0f} | Var={_var:+,.0f} | "
+            f"Tréso clôture={_clo:,.0f} {devise}"
         )
 
     prompt = f"""Tu es un expert-comptable SYSCOHADA analysant un Tableau de Flux de Trésorerie.
