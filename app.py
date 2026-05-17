@@ -890,4 +890,84 @@ elif page == "📰 Veille Fiscale UEMOA":
     **Devise :** {info_pays['devise']}
     """)
 
-    if 've
+    if 'veille_resultat' not in st.session_state:
+        st.session_state.veille_resultat = None
+    if 'veille_pays' not in st.session_state:
+        st.session_state.veille_pays = None
+
+    # Réinitialiser si changement de pays
+    if st.session_state.get('veille_pays') != code_pays:
+        st.session_state.veille_resultat = None
+        st.session_state.veille_pays = code_pays
+
+    if st.button("📰 Obtenir la veille fiscale", type="primary", use_container_width=True):
+        with st.spinner("Génération de la veille fiscale en cours..."):
+            resultat = veille_fiscale_uemoa(code_pays)
+            st.session_state.veille_resultat = resultat
+
+    if st.session_state.veille_resultat:
+        st.markdown(st.session_state.veille_resultat)
+        st.divider()
+        col1, col2 = st.columns(2)
+        with col1:
+            telecharger_html("Veille_Fiscale_UEMOA", st.session_state.veille_resultat)
+        with col2:
+            telecharger_word("Veille_Fiscale_UEMOA", st.session_state.veille_resultat, pays=info_pays['nom'])
+
+# =============================================================================
+# PAGE : CALENDRIER FISCAL / TABLEAU DE BORD
+# =============================================================================
+elif page == "📅 Calendrier Fiscal UEMOA":
+    page_calendrier_fiscal()
+
+elif page == "📊 Tableau de Bord Fiscal":
+    page_dashboard()
+
+# =============================================================================
+# PAGE : ANALYSE DU RISQUE FISCAL
+# =============================================================================
+elif page == "🚨 Analyse du Risque Fiscal":
+    page_risque_fiscal()
+
+# =============================================================================
+# PAGE : ANALYSE FACTURE SYSCOHADA
+# =============================================================================
+elif page == "🧾 Analyse Facture SYSCOHADA":
+    page_analyse_facture()
+
+# =============================================================================
+# PAGE : BALANCE AGEE TIERS
+# =============================================================================
+elif page == "💳 Balance Âgée Tiers":
+    page_balance_agee()
+
+# =============================================================================
+# PAGE : RAPPROCHEMENT BANCAIRE
+# =============================================================================
+elif page == "🏦 Rapprochement Bancaire":
+    page_rapprochement_bancaire()
+
+# =============================================================================
+# PAGE : TRESORERIE PREVISIONNELLE
+# =============================================================================
+elif page == "📊 Tresorerie Previsionnelle":
+    page_tresorerie_previsionnelle()
+
+# =============================================================================
+# PAGE : PLAN DE FINANCEMENT
+# =============================================================================
+elif page == "📐 Plan de Financement":
+    page_plan_financement()
+
+# =============================================================================
+# PAGE : TFT SYSCOHADA
+# =============================================================================
+elif page == "💹 TFT SYSCOHADA":
+    page_tft()
+
+st.divider()
+st.caption(
+    "**SMD Consulting** - Superviseur IA Comptable SYSCOHADA\n"
+    "Comptable Augmenté par Intelligence Artificielle — Normes OHADA/UEMOA\n"
+    "© 2026 - Souleymane Diallo"
+)
