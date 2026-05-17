@@ -1,7 +1,10 @@
+import os
 import sqlite3
 from datetime import datetime
 
-DB_PATH = "smd_syscohada.db"
+# Sur Streamlit Cloud le filesystem est éphémère — /tmp persiste pendant la session
+_IS_CLOUD = os.getenv("STREAMLIT_SHARING_MODE") or os.getenv("HOME") == "/home/appuser"
+DB_PATH = "/tmp/smd_syscohada.db" if _IS_CLOUD else "smd_syscohada.db"
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)

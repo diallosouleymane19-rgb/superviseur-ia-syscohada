@@ -4,3 +4,5 @@ __pycache__/
 .env
 *.db
 .DS_Store
+# Streamlit secrets (ne jamais committer)
+.streamlit/secrets.toml

@@ -34,7 +34,6 @@ from data.plan_comptable_syscohada import (
 )
 from auth import login, logout, is_connecte
 from utils.export_excel import export_etats_financiers_excel
-from utils.export_excel import export_etats_financiers_excel
 from smd_streamlit import page_dashboard, page_risque_fiscal, page_analyse_facture
 from smd_calendar import page_calendrier_fiscal
 from smd_aging import page_balance_agee
