@@ -36,6 +36,7 @@ from auth import login, logout, is_connecte
 from utils.export_excel import export_etats_financiers_excel
 from utils.export_excel import export_etats_financiers_excel
 from smd_streamlit import page_dashboard, page_risque_fiscal, page_analyse_facture
+from smd_calendar import page_calendrier_fiscal
 
 # =============================================================================
 # INITIALISATION
@@ -245,6 +246,7 @@ page = st.sidebar.selectbox(
         "🔍 Plan Comptable OHADA",
         "📰 Veille Fiscale UEMOA",
         "─── Fiscal Quantitatif ───",
+        "📅 Calendrier Fiscal UEMOA",
         "📊 Tableau de Bord Fiscal",
         "🚨 Analyse du Risque Fiscal",
         "🧾 Analyse Facture SYSCOHADA",
@@ -858,6 +860,9 @@ elif page == "📰 Veille Fiscale UEMOA":
 # =============================================================================
 # PAGE : TABLEAU DE BORD FISCAL
 # =============================================================================
+elif page == "📅 Calendrier Fiscal UEMOA":
+    page_calendrier_fiscal()
+
 elif page == "📊 Tableau de Bord Fiscal":
     page_dashboard()
 
