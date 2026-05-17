@@ -1,67 +1,84 @@
 # -*- coding: utf-8 -*-
 """
 Base de données — SMD Consulting
-Supabase (PostgreSQL) en production, SQLite en local si Supabase non configuré
+Supabase REST API (production) / SQLite (local fallback)
 """
 import os
 import sqlite3
+import requests
 from datetime import datetime
 
-# ─── Client Supabase ────────────────────────────────────────────────────────
+# ─── Config Supabase ────────────────────────────────────────────────────────
 
-def _get_supabase():
-    """Retourne un client Supabase ou None si non configuré."""
+def _get_config():
+    """Récupère URL et clé Supabase depuis st.secrets ou env."""
     try:
-        from supabase import create_client
         import streamlit as st
-        url  = st.secrets.get("SUPABASE_URL", "")
-        key  = st.secrets.get("SUPABASE_KEY", "")
+        url = st.secrets.get("SUPABASE_URL", "")
+        key = st.secrets.get("SUPABASE_KEY", "")
         if url and key:
-            return create_client(url, key)
+            return url.rstrip("/"), key
     except Exception:
         pass
-    # Fallback : pas de Supabase configuré
-    try:
-        url  = os.getenv("SUPABASE_URL", "")
-        key  = os.getenv("SUPABASE_KEY", "")
-        if url and key:
-            from supabase import create_client
-            return create_client(url, key)
-    except Exception:
-        pass
-    return None
+    url = os.getenv("SUPABASE_URL", "")
+    key = os.getenv("SUPABASE_KEY", "")
+    if url and key:
+        return url.rstrip("/"), key
+    return None, None
+
+
+def _headers():
+    _, key = _get_config()
+    return {
+        "apikey": key,
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
+
+
+def _use_supabase():
+    url, key = _get_config()
+    return bool(url and key)
+
+
+def _sb_url(table):
+    url, _ = _get_config()
+    return f"{url}/rest/v1/{table}"
+
 
 def _user_email():
-    """Récupère l'email de l'utilisateur connecté."""
     try:
         import streamlit as st
         return st.session_state.get("user_email", "anonymous")
     except Exception:
         return "anonymous"
 
+
 # ─── SQLite fallback ────────────────────────────────────────────────────────
 
 _IS_CLOUD = os.getenv("STREAMLIT_SHARING_MODE") or os.getenv("HOME") == "/home/appuser"
 DB_PATH   = "/tmp/smd_syscohada.db" if _IS_CLOUD else "smd_syscohada.db"
 
-def _sqlite():
-    return sqlite3.connect(DB_PATH)
-
-# ─── init_db ────────────────────────────────────────────────────────────────
 
 def init_db():
-    """Initialise la DB locale SQLite (fallback uniquement)."""
-    conn = _sqlite()
+    """Initialise SQLite (fallback local uniquement)."""
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""
         CREATE TABLE IF NOT EXISTS entreprises (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_email TEXT DEFAULT 'local',
             nom TEXT NOT NULL, pays TEXT, code_pays TEXT,
-            secteur TEXT, regime_fiscal TEXT, contact TEXT,
-            email TEXT, date_creation TEXT
+            secteur TEXT, regime_fiscal TEXT,
+            contact TEXT, email TEXT, date_creation TEXT
         )
     """)
+    # Migration : ajouter user_email si absent (ancienne DB)
+    try:
+        c.execute("ALTER TABLE entreprises ADD COLUMN user_email TEXT DEFAULT 'local'")
+    except Exception:
+        pass
     c.execute("""
         CREATE TABLE IF NOT EXISTS analyses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,115 +89,143 @@ def init_db():
             FOREIGN KEY (entreprise_id) REFERENCES entreprises(id)
         )
     """)
+    try:
+        c.execute("ALTER TABLE analyses ADD COLUMN user_email TEXT DEFAULT 'local'")
+    except Exception:
+        pass
     conn.commit()
     conn.close()
+
 
 # ════════════════════════════════════════════════════════════════════════════
 # ENTREPRISES
 # ════════════════════════════════════════════════════════════════════════════
 
 def creer_entreprise(nom, pays, code_pays, secteur, regime_fiscal, contact, email):
-    sb = _get_supabase()
     date_c = datetime.now().strftime("%d/%m/%Y %H:%M")
-    if sb:
-        sb.table("entreprises").insert({
-            "user_email": _user_email(),
-            "nom": nom, "pays": pays, "code_pays": code_pays,
-            "secteur": secteur, "regime_fiscal": regime_fiscal,
-            "contact": contact, "email": email, "date_creation": date_c
-        }).execute()
+    user   = _user_email()
+
+    if _use_supabase():
+        payload = {
+            "user_email": user, "nom": nom, "pays": pays,
+            "code_pays": code_pays, "secteur": secteur,
+            "regime_fiscal": regime_fiscal, "contact": contact,
+            "email": email, "date_creation": date_c
+        }
+        r = requests.post(_sb_url("entreprises"), json=payload, headers=_headers())
+        if r.status_code not in (200, 201):
+            raise Exception(f"Supabase error {r.status_code}: {r.text}")
     else:
-        conn = _sqlite()
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
         conn.execute("""
             INSERT INTO entreprises
             (user_email, nom, pays, code_pays, secteur, regime_fiscal, contact, email, date_creation)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (_user_email(), nom, pays, code_pays, secteur, regime_fiscal, contact, email, date_c))
+        """, (user, nom, pays, code_pays, secteur, regime_fiscal, contact, email, date_c))
         conn.commit(); conn.close()
 
 
 def lister_entreprises():
-    sb = _get_supabase()
-    if sb:
-        res = sb.table("entreprises")\
-                .select("*")\
-                .eq("user_email", _user_email())\
-                .order("nom")\
-                .execute()
-        return [(r["id"], r["nom"], r["pays"], r["code_pays"],
-                 r.get("secteur",""), r.get("regime_fiscal",""),
-                 r.get("contact",""), r.get("email",""), r.get("date_creation",""))
-                for r in res.data]
+    user = _user_email()
+    if _use_supabase():
+        r = requests.get(
+            _sb_url("entreprises"),
+            headers=_headers(),
+            params={"user_email": f"eq.{user}", "order": "nom.asc"}
+        )
+        if r.status_code == 200:
+            return [(e["id"], e["nom"], e.get("pays",""), e.get("code_pays",""),
+                     e.get("secteur",""), e.get("regime_fiscal",""),
+                     e.get("contact",""), e.get("email",""), e.get("date_creation",""))
+                    for e in r.json()]
+        return []
     else:
-        conn = _sqlite()
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
         rows = conn.execute("SELECT * FROM entreprises ORDER BY nom").fetchall()
         conn.close(); return rows
 
 
 def get_entreprise(entreprise_id):
-    sb = _get_supabase()
-    if sb:
-        res = sb.table("entreprises").select("*").eq("id", entreprise_id).execute()
-        if res.data:
-            r = res.data[0]
-            return (r["id"], r["nom"], r["pays"], r["code_pays"],
-                    r.get("secteur",""), r.get("regime_fiscal",""),
-                    r.get("contact",""), r.get("email",""), r.get("date_creation",""))
+    if _use_supabase():
+        r = requests.get(
+            _sb_url("entreprises"),
+            headers=_headers(),
+            params={"id": f"eq.{entreprise_id}"}
+        )
+        if r.status_code == 200 and r.json():
+            e = r.json()[0]
+            return (e["id"], e["nom"], e.get("pays",""), e.get("code_pays",""),
+                    e.get("secteur",""), e.get("regime_fiscal",""),
+                    e.get("contact",""), e.get("email",""), e.get("date_creation",""))
+        return None
     else:
-        conn = _sqlite()
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
         row = conn.execute("SELECT * FROM entreprises WHERE id=?", (entreprise_id,)).fetchone()
         conn.close(); return row
 
 
 def supprimer_entreprise(entreprise_id):
-    sb = _get_supabase()
-    if sb:
-        sb.table("analyses").delete().eq("entreprise_id", entreprise_id).execute()
-        sb.table("entreprises").delete().eq("id", entreprise_id).execute()
+    if _use_supabase():
+        requests.delete(_sb_url("analyses"),    headers=_headers(), params={"entreprise_id": f"eq.{entreprise_id}"})
+        requests.delete(_sb_url("entreprises"), headers=_headers(), params={"id": f"eq.{entreprise_id}"})
     else:
-        conn = _sqlite()
-        conn.execute("DELETE FROM analyses WHERE entreprise_id=?", (entreprise_id,))
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute("DELETE FROM analyses WHERE entreprise_id=?",  (entreprise_id,))
         conn.execute("DELETE FROM entreprises WHERE id=?", (entreprise_id,))
         conn.commit(); conn.close()
+
 
 # ════════════════════════════════════════════════════════════════════════════
 # ANALYSES
 # ════════════════════════════════════════════════════════════════════════════
 
 def sauvegarder_analyse(entreprise_id, type_analyse, titre, contenu, pays, exercice):
-    sb = _get_supabase()
     date_a = datetime.now().strftime("%d/%m/%Y %H:%M")
-    if sb:
-        sb.table("analyses").insert({
-            "entreprise_id": entreprise_id,
-            "user_email": _user_email(),
+    user   = _user_email()
+    if _use_supabase():
+        payload = {
+            "entreprise_id": entreprise_id, "user_email": user,
             "type_analyse": type_analyse, "titre": titre,
             "contenu": contenu, "pays": pays,
             "exercice": exercice, "date_analyse": date_a
-        }).execute()
+        }
+        r = requests.post(_sb_url("analyses"), json=payload, headers=_headers())
+        if r.status_code not in (200, 201):
+            raise Exception(f"Supabase error {r.status_code}: {r.text}")
     else:
-        conn = _sqlite()
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
         conn.execute("""
             INSERT INTO analyses
             (entreprise_id, user_email, type_analyse, titre, contenu, pays, exercice, date_analyse)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (entreprise_id, _user_email(), type_analyse, titre, contenu, pays, exercice, date_a))
+        """, (entreprise_id, user, type_analyse, titre, contenu, pays, exercice, date_a))
         conn.commit(); conn.close()
 
 
 def lister_analyses(entreprise_id):
-    sb = _get_supabase()
-    if sb:
-        res = sb.table("analyses")\
-                .select("id, type_analyse, titre, date_analyse, pays, exercice")\
-                .eq("entreprise_id", entreprise_id)\
-                .order("date_analyse", desc=True)\
-                .execute()
-        return [(r["id"], r["type_analyse"], r["titre"],
-                 r["date_analyse"], r.get("pays",""), r.get("exercice",""))
-                for r in res.data]
+    if _use_supabase():
+        r = requests.get(
+            _sb_url("analyses"),
+            headers=_headers(),
+            params={
+                "select": "id,type_analyse,titre,date_analyse,pays,exercice",
+                "entreprise_id": f"eq.{entreprise_id}",
+                "order": "date_analyse.desc"
+            }
+        )
+        if r.status_code == 200:
+            return [(a["id"], a["type_analyse"], a["titre"],
+                     a["date_analyse"], a.get("pays",""), a.get("exercice",""))
+                    for a in r.json()]
+        return []
     else:
-        conn = _sqlite()
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
         rows = conn.execute("""
             SELECT id, type_analyse, titre, date_analyse, pays, exercice
             FROM analyses WHERE entreprise_id=? ORDER BY date_analyse DESC
@@ -189,25 +234,26 @@ def lister_analyses(entreprise_id):
 
 
 def get_analyse(analyse_id):
-    sb = _get_supabase()
-    if sb:
-        res = sb.table("analyses").select("*").eq("id", analyse_id).execute()
-        if res.data:
-            r = res.data[0]
-            return (r["id"], r.get("entreprise_id"), r.get("type_analyse"),
-                    r.get("titre"), r.get("contenu"), r.get("pays"),
-                    r.get("exercice"), r.get("date_analyse"))
+    if _use_supabase():
+        r = requests.get(_sb_url("analyses"), headers=_headers(), params={"id": f"eq.{analyse_id}"})
+        if r.status_code == 200 and r.json():
+            a = r.json()[0]
+            return (a["id"], a.get("entreprise_id"), a.get("type_analyse"),
+                    a.get("titre"), a.get("contenu"), a.get("pays"),
+                    a.get("exercice"), a.get("date_analyse"))
+        return None
     else:
-        conn = _sqlite()
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
         row = conn.execute("SELECT * FROM analyses WHERE id=?", (analyse_id,)).fetchone()
         conn.close(); return row
 
 
 def supprimer_analyse(analyse_id):
-    sb = _get_supabase()
-    if sb:
-        sb.table("analyses").delete().eq("id", analyse_id).execute()
+    if _use_supabase():
+        requests.delete(_sb_url("analyses"), headers=_headers(), params={"id": f"eq.{analyse_id}"})
     else:
-        conn = _sqlite()
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
         conn.execute("DELETE FROM analyses WHERE id=?", (analyse_id,))
         conn.commit(); conn.close()
