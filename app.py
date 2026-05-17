@@ -39,6 +39,7 @@ from smd_streamlit import page_dashboard, page_risque_fiscal, page_analyse_factu
 from smd_calendar import page_calendrier_fiscal
 from smd_aging import page_balance_agee
 from smd_reconciliation import page_rapprochement_bancaire
+from smd_tresorerie import page_tresorerie_previsionnelle
 
 # =============================================================================
 # INITIALISATION
@@ -254,6 +255,7 @@ page = st.sidebar.selectbox(
         "🧾 Analyse Facture SYSCOHADA",
         "💳 Balance Âgée Tiers",
         "🏦 Rapprochement Bancaire",
+        "📊 Tresorerie Previsionnelle",
     ],
     label_visibility="collapsed"
 )
@@ -897,6 +899,12 @@ elif page == "🏦 Rapprochement Bancaire":
 # =============================================================================
 # FOOTER
 # =============================================================================
+
+# ===========================================================================
+# PAGE : TRESORERIE PREVISIONNELLE
+# ===========================================================================
+elif page == "📊 Tresorerie Previsionnelle":
+    page_tresorerie_previsionnelle()
 
 st.divider()
 st.caption(
