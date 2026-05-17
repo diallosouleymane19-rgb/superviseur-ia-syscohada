@@ -143,7 +143,11 @@ def lister_entreprises():
     else:
         init_db()
         conn = sqlite3.connect(DB_PATH)
-        rows = conn.execute("SELECT * FROM entreprises ORDER BY nom").fetchall()
+        rows = conn.execute("""
+            SELECT id, nom, pays, code_pays, secteur, regime_fiscal,
+                   contact, email, date_creation
+            FROM entreprises ORDER BY nom
+        """).fetchall()
         conn.close(); return rows
 
 
@@ -163,7 +167,11 @@ def get_entreprise(entreprise_id):
     else:
         init_db()
         conn = sqlite3.connect(DB_PATH)
-        row = conn.execute("SELECT * FROM entreprises WHERE id=?", (entreprise_id,)).fetchone()
+        row = conn.execute("""
+            SELECT id, nom, pays, code_pays, secteur, regime_fiscal,
+                   contact, email, date_creation
+            FROM entreprises WHERE id=?
+        """, (entreprise_id,)).fetchone()
         conn.close(); return row
 
 
