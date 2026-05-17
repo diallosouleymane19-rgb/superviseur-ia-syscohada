@@ -413,16 +413,26 @@ def page_balance_agee():
 
     mapping = _detecter_colonnes(df_preview)
 
-    # Permettre a l'utilisateur de corriger le mapping si detection incorrecte
-    with st.expander("Correspondance des colonnes (verifier si necessaire)"):
+    # Ouvrir automatiquement si colonnes obligatoires non detectees
+    detection_ok = ("date" in mapping) and ("montant" in mapping)
+    if not detection_ok:
+        st.warning(
+            "Colonnes non detectees automatiquement. "
+            "Ouvrez **Correspondance des colonnes** ci-dessous et selectionnez manuellement "
+            "les colonnes Date et Montant dans votre fichier."
+        )
+
+    with st.expander("Correspondance des colonnes (verifier si necessaire)", expanded=not detection_ok):
+        st.markdown("**Colonnes disponibles dans votre fichier :** " + ", ".join([f"`{c}`" for c in df_preview.columns]))
+        st.markdown("---")
         all_cols = ["-- Non disponible --"] + list(df_preview.columns)
         col_tiers = st.selectbox("Colonne Tiers (nom client/fournisseur)",
                                   all_cols,
                                   index=all_cols.index(mapping["tiers"]) if "tiers" in mapping and mapping["tiers"] in all_cols else 0)
-        col_date  = st.selectbox("Colonne Date (echeance ou facture)",
+        col_date  = st.selectbox("Colonne Date (echeance ou facture) *",
                                   all_cols,
                                   index=all_cols.index(mapping["date"]) if "date" in mapping and mapping["date"] in all_cols else 0)
-        col_mnt   = st.selectbox("Colonne Montant (solde du)",
+        col_mnt   = st.selectbox("Colonne Montant (solde du) *",
                                   all_cols,
                                   index=all_cols.index(mapping["montant"]) if "montant" in mapping and mapping["montant"] in all_cols else 0)
         col_ref   = st.selectbox("Colonne Reference (optionnel)",
@@ -440,7 +450,7 @@ def page_balance_agee():
 
     if st.button("Analyser la balance agee", type="primary", use_container_width=True):
         if "date" not in mapping or "montant" not in mapping:
-            st.error("Impossible de detecter les colonnes Date et Montant. Verifiez la correspondance ci-dessus.")
+            st.error("Les colonnes Date et Montant sont obligatoires. Ouvrez 'Correspondance des colonnes' et selectionnez-les.")
             return
 
         with st.spinner("Calcul en cours..."):
