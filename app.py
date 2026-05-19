@@ -340,60 +340,174 @@ st.sidebar.markdown(f"""
 # PAGE : ACCUEIL
 # =============================================================================
 if page == "🏠 Accueil":
-    col_logo, col_titre = st.columns([1, 4])
+    banniere_demo()
+ 
+    # ── En-tête ───────────────────────────────────────────────────────────────
+    col_logo, col_titre = st.columns([1, 6])
     with col_logo:
         try:
             st.image(
                 "https://raw.githubusercontent.com/diallosouleymane19-rgb/superviseur-ia-syscohada/main/uemoa.png",
-                width=100
+                width=80
             )
         except:
             st.markdown("🌍")
+ 
     with col_titre:
-        st.title("Superviseur IA Comptable SYSCOHADA")
-
-    st.markdown("### Assistant comptable intelligent — Normes OHADA/UEMOA")
-    st.divider()
-
-    col1, col2, col3 = st.columns(3)
-    col1.info("📊 **Analyse Balance**\nSelon normes SYSCOHADA")
-    col2.info("📋 **Bilan SYSCOHADA**\nGénération automatique")
-    col3.info("📈 **Compte de Résultat**\nSIG et ratios OHADA")
-
-    st.markdown("---")
-    col4, col5, col6 = st.columns(3)
-    col4.success("💰 **TAFIRE**\nTableau financier OHADA")
-    col5.success("📎 **Notes Annexes**\nObligatoires SYSCOHADA")
-    col6.success("🧾 **Liasse Fiscale**\nPar pays UEMOA")
-
-    st.markdown("---")
-    col7, col8 = st.columns(2)
-    col7.warning("🔍 **Plan Comptable OHADA**\nRecherche et consultation")
-    col8.warning("📰 **Veille Fiscale UEMOA**\nActualités par pays")
-
-    st.divider()
-    st.subheader("🌍 Pays membres UEMOA")
-    cols = st.columns(4)
-    drapeaux = ["🇸🇳", "🇧🇯", "🇧🇫", "🇨🇮", "🇬🇼", "🇲🇱", "🇳🇪", "🇹🇬"]
-    for i, (code, info) in enumerate(FISCALITE_UEMOA.items()):
-        cols[i % 4].metric(
-            f"{drapeaux[i]} {info['nom']}",
-            f"TVA {info['taux_tva']}%",
-            f"IS {info['taux_is']}%"
-        )
-
-    st.divider()
-    st.markdown("### 🔒 Vos Données Sont Protégées")
-    col1, col2, col3 = st.columns(3)
+        st.markdown("""
+        <div style="padding:1rem 1rem 1rem 0.5rem; border-bottom:2px solid #0B2340; margin-bottom:1rem;">
+            <div style="margin-bottom:6px;">
+                <span style="background:#0B2340; color:#C4973B; padding:3px 10px;
+                             border-radius:4px; font-size:0.75rem; font-weight:700;
+                             letter-spacing:1.5px; margin-right:8px;">
+                    SYSCOHADA · RÉVISÉ 2017
+                </span>
+                <span style="background:#EAF5EE; color:#27AE60; padding:3px 10px;
+                             border-radius:4px; font-size:0.75rem; font-weight:700;">
+                    ✓ Système opérationnel
+                </span>
+            </div>
+            <h1 style="margin:0; color:#0B2340; font-size:1.9rem; font-weight:700;">
+                Superviseur IA Comptable
+            </h1>
+            <p style="margin:0.3rem 0 0 0; color:#555; font-size:0.92rem;">
+                SMD Consulting &nbsp;·&nbsp; Supervision Comptable OHADA augmentée par l'IA
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <span style="color:#0B2340; font-weight:600;">Zone UEMOA &amp; CEMAC</span>
+                &nbsp;·&nbsp;
+                <span style="color:#0B2340; font-weight:600;">Afrique francophone</span>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+ 
+    # ── Bannière pays actif ────────────────────────────────────────────────────
+    st.markdown(f"""
+    <div style="background:#0B2340; border-radius:8px; padding:12px 20px;
+                margin-bottom:1.5rem; display:flex; align-items:center;
+                justify-content:space-between;">
+        <div style="color:#C4973B; font-size:0.78rem; font-weight:700; letter-spacing:1px;">
+            🌍 PAYS ACTIF
+        </div>
+        <div style="color:#FFFFFF; font-size:0.85rem;">
+            {info_pays['nom']} &nbsp;·&nbsp;
+            TVA {info_pays['taux_tva']}% &nbsp;·&nbsp;
+            IS {info_pays['taux_is']}% &nbsp;·&nbsp;
+            Devise : <strong style="color:#C4973B;">{info_pays['devise']}</strong>
+        </div>
+        <div style="color:#C4973B; font-size:0.78rem; font-weight:600;">
+            Acte Uniforme OHADA
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+ 
+    # ── 4 catégories de modules ───────────────────────────────────────────────
+    col1, col2, col3, col4 = st.columns(4)
+ 
     with col1:
-        st.success("✅ **Anonymisation**\n\nNIF masqués, noms supprimés avant envoi")
+        st.markdown("""
+        <div style="border-left:3px solid #0B2340; padding-left:12px;">
+            <div style="font-weight:700; color:#0B2340; font-size:0.88rem; margin-bottom:4px;">
+                🔍 Analyse & Audit
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.caption("Balance SYSCOHADA, Benford FCFA, alertes anomalies, cohérence données")
+ 
     with col2:
-        st.success("✅ **Non stockées**\n\nAucune conservation après analyse")
+        st.markdown("""
+        <div style="border-left:3px solid #0B2340; padding-left:12px;">
+            <div style="font-weight:700; color:#0B2340; font-size:0.88rem; margin-bottom:4px;">
+                📊 États Financiers OHADA
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.caption("Bilan SYSCOHADA, Compte de Résultat, TAFIRE, Notes annexes")
+ 
     with col3:
-        st.success("✅ **IA éthique**\n\nDonnées non utilisées pour entraîner Mistral")
-
+        st.markdown("""
+        <div style="border-left:3px solid #0B2340; padding-left:12px;">
+            <div style="font-weight:700; color:#0B2340; font-size:0.88rem; margin-bottom:4px;">
+                💹 Fiscal Quantitatif
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.caption("Trésorerie, Plan de financement, TFT, Balance âgée, Rapprochement")
+ 
+    with col4:
+        st.markdown("""
+        <div style="border-left:3px solid #0B2340; padding-left:12px;">
+            <div style="font-weight:700; color:#0B2340; font-size:0.88rem; margin-bottom:4px;">
+                📁 Fiscal & Conformité
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.caption("Liasse fiscale, Plan OHADA, Calendrier UEMOA, Veille réglementaire")
+ 
     st.divider()
-    st.caption("**SMD Consulting** - Superviseur IA SYSCOHADA © 2026")
+ 
+    # ── Métriques de session ──────────────────────────────────────────────────
+    user = st.session_state.get("user_email", "—")
+    cabinet = st.session_state.get("cabinet", "—")
+ 
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("👤 Session", user.split("@")[0] if "@" in user else user)
+    c2.metric("🏢 Cabinet", cabinet if cabinet != "—" else "Non renseigné")
+    c3.metric("📦 Modules", "22")
+    c4.metric("🔒 Données", "Non conservées")
+ 
+    st.divider()
+ 
+    # ── Pays membres UEMOA — version sobre ───────────────────────────────────
+    st.markdown("""
+    <div style="font-weight:700; color:#0B2340; font-size:0.88rem;
+                letter-spacing:0.5px; margin-bottom:12px;">
+        🌍 PAYS MEMBRES UEMOA COUVERTS
+    </div>
+    """, unsafe_allow_html=True)
+ 
+    drapeaux = ["🇸🇳", "🇧🇯", "🇧🇫", "🇨🇮", "🇬🇼", "🇲🇱", "🇳🇪", "🇹🇬"]
+    cols = st.columns(4)
+    for i, (code_p, info_p) in enumerate(FISCALITE_UEMOA.items()):
+        with cols[i % 4]:
+            actif = "▶ " if code_p == code_pays else ""
+            st.markdown(f"""
+            <div style="border:1px solid {'#0B2340' if code_p == code_pays else '#E2DDD6'};
+                        background:{'#F0F4F8' if code_p == code_pays else '#FAFAF8'};
+                        border-radius:6px; padding:10px 12px; margin-bottom:8px;">
+                <div style="font-weight:700; color:#0B2340; font-size:0.85rem;">
+                    {drapeaux[i]} {actif}{info_p['nom']}
+                </div>
+                <div style="color:#666; font-size:0.78rem; margin-top:3px;">
+                    TVA {info_p['taux_tva']}% · IS {info_p['taux_is']}%
+                    · {info_p['devise']}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+ 
+    st.divider()
+ 
+    # ── Encart sécurité — version compacte ───────────────────────────────────
+    st.markdown("""
+    <div style="background:#F8F6F2; border:1px solid #E2DDD6;
+                border-left:4px solid #C4973B; border-radius:6px;
+                padding:14px 20px; margin-bottom:1rem;">
+        <div style="font-weight:700; color:#0B2340; margin-bottom:8px; font-size:0.88rem;">
+            🔒 Protection de vos données
+        </div>
+        <div style="color:#444; font-size:0.82rem; line-height:1.7;">
+            ✅ <strong>NIF masqués</strong>, noms supprimés avant envoi &nbsp;·&nbsp;
+            ✅ <strong>Aucune conservation</strong> après analyse &nbsp;·&nbsp;
+            ✅ Données <strong>non utilisées</strong> pour entraîner Mistral AI &nbsp;·&nbsp;
+            ✅ Hébergement <strong>Supabase UE</strong>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+ 
+    # ── Pied de page ─────────────────────────────────────────────────────────
+    st.caption(
+        "SMD Consulting © 2026 — SYSCOHADA révisé 2017 · Acte Uniforme OHADA · "
+        "Données traitées localement, jamais stockées."
+    )
 
 # =============================================================================
 # PAGE : DOSSIERS ENTREPRISES
