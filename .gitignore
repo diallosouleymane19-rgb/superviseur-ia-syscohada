@@ -1,0 +1,42 @@
+# Secrets — NE JAMAIS pousser sur GitHub
+.streamlit/secrets.toml
+.env
+*.env
+
+# Bases de données locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Streamlit
+.streamlit/cache/
+
+# Éditeur
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Fichiers temporaires d'upload
+uploads/
+tmp/
+
+# Environnements virtuels Python
+venv/
+.venv/
+env/
+.env/
+

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMD Consulting — Comptable Confirmé Freelance & ARC PCG</title>
+  <meta name="description" content="SMD Consulting : expertise comptable, fiscale et sociale pour TPE, PME et associations. Créateur d'ARC PCG, l'Assistant de Révision Comptable pour le contrôle de conformité au Plan Comptable Général." />
+  <style>
+    :root {
+      --navy:   #0A2342;
+      --navy2:  #12375E;
+      --green:  #0E6655;
+      --green2: #1ABC9C;
+      --gray:   #5D6D7E;
+      --lgray:  #F4F6F8;
+      --mgray:  #BFC9CA;
+      --white:  #FFFFFF;
+      --text:   #1A1A2E;
+      --radius: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── NAVBAR ─────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid #e8ecef;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+    }
+
+    .nav-logo svg { height: 44px; width: auto; }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--navy); }
+
+    .nav-cta {
+      background: var(--green);
+      color: var(--white) !important;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--green2) !important; color: var(--white) !important; }
+
+    /* ── HERO ────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #0E4D3A 100%);
+      color: var(--white);
+      padding: 90px 5% 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(26,188,156,.18);
+      color: var(--green2);
+      border: 1px solid rgba(26,188,156,.4);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span { color: var(--green2); }
+
+    .hero p {
+      font-size: 17px;
+      color: rgba(255,255,255,.82);
+      margin-bottom: 36px;
+      line-height: 1.8;
+    }
+
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: var(--green2); transform: translateY(-1px); }
+
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,.5);
+      color: var(--white);
+      padding: 11px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      text-align: center;
+    }
+
+    .stat-card .num {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--green2);
+      display: block;
+    }
+
+    .stat-card .lbl {
+      font-size: 13px;
+      color: rgba(255,255,255,.7);
+      margin-top: 4px;
+    }
+
+    /* ── SECTIONS COMMUNES ───────────────────────── */
+    section { padding: 80px 5%; }
+
+    .section-tag {
+      display: inline-block;
+      background: #E8F8F5;
+      color: var(--green);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      margin-bottom: 14px;
+    }
+
+    .section-tag.navy { background: #E8EEF4; color: var(--navy); }
+
+    h2 {
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 14px;
+      line-height: 1.25;
+    }
+
+    .section-intro {
+      font-size: 17px;
+      color: var(--gray);
+      max-width: 600px;
+      margin-bottom: 50px;
+    }
+
+    /* ── À PROPOS ────────────────────────────────── */
+    .about { background: var(--lgray); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .about-text p { color: var(--gray); margin-bottom: 16px; }
+
+    .about-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .highlight {
+      display: flex;
+      gap: 16px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      border-left: 4px solid var(--green);
+    }
+
+    .highlight-icon {
+      width: 44px;
+      height: 44px;
+      background: #E8F8F5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 22px;
+    }
+
+    .highlight h3 { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+    .highlight p { font-size: 13px; color: var(--gray); margin: 0; }
+
+    /* ── SERVICES ────────────────────────────────── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid #e8ecef;
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .service-card:hover { box-shadow: 0 8px 30px rgba(10,35,66,.1); transform: translateY(-3px); }
+
+    .service-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .service-card h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+    .service-card p { font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+    /* ── SAAS SECTION ────────────────────────────── */
+    .saas {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .saas h2 { color: var(--white); }
+
+    .saas .section-intro { color: rgba(255,255,255,.75); max-width: 680px; }
+
+    .saas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .saas-features { display: flex; flex-direction: column; gap: 20px; }
+
+    .saas-feature {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .saas-feature-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green2);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .saas-feature h3 { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .saas-feature p { font-size: 14px; color: rgba(255,255,255,.65); }
+
+    .saas-mockup {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      padding: 28px;
+    }
+
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .mockup-title { font-size: 13px; color: rgba(255,255,255,.6); margin-left: 6px; }
+
+    .mockup-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 13px;
+    }
+
+    .mockup-row:last-child { border-bottom: none; }
+
+    .mockup-label { color: rgba(255,255,255,.6); }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .badge-ok { background: rgba(26,188,156,.2); color: var(--green2); }
+    .badge-warn { background: rgba(243,156,18,.2); color: #F39C12; }
+    .badge-err { background: rgba(231,76,60,.2); color: #E74C3C; }
+
+    .saas-cta {
+      margin-top: 32px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* ── TARIFS ──────────────────────────────────── */
+    .pricing { background: var(--lgray); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+    }
+
+    .pricing-card {
+      background: var(--white);
+      border: 1px solid #e8ecef;
+      border-radius: var(--radius);
+      padding: 32px 28px;
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--green);
+      position: relative;
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .pricing-card .plan-name { font-size: 13px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px; }
+    .pricing-card .price { font-size: 36px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .pricing-card .price span { font-size: 15px; font-weight: 400; color: var(--gray); }
+    .pricing-card .price-desc { font-size: 13px; color: var(--gray); margin-bottom: 24px; }
+
+    .pricing-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-card li { font-size: 14px; color: var(--gray); display: flex; gap: 8px; align-items: flex-start; }
+    .pricing-card li::before { content: "✓"; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+    .btn-card {
+      display: block;
+      text-align: center;
+      padding: 11px;
+      border-radius: 7px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .btn-card-green { background: var(--green); color: var(--white); }
+    .btn-card-green:hover { background: var(--green2); }
+    .btn-card-outline { border: 1.5px solid var(--navy); color: var(--navy); }
+    .btn-card-outline:hover { background: var(--navy); color: var(--white); }
+
+    /* ── CONTACT ─────────────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      background: #E8EEF4;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .contact-item h3 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+    .contact-item p, .contact-item a { font-size: 14px; color: var(--gray); text-decoration: none; }
+    .contact-item a:hover { color: var(--green); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e0e6ec;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus { border-color: var(--green); }
+
+    .contact-form textarea { height: 120px; resize: vertical; }
+
+    .contact-form button {
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      font-family: inherit;
+    }
+    .contact-form button:hover { background: var(--green); }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.7);
+      padding: 50px 5% 30px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      margin-bottom: 24px;
+    }
+
+    .footer-brand p { font-size: 14px; margin-top: 14px; line-height: 1.7; }
+
+    .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 14px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-col li a { font-size: 13px; color: rgba(255,255,255,.6); text-decoration: none; transition: color .2s; }
+    .footer-col li a:hover { color: var(--green2); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(255,255,255,.4);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--green2); }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero, .about-grid, .saas-grid, .contact-grid { grid-template-columns: 1fr; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero { padding: 60px 5% 50px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ──────────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo" aria-label="SMD Consulting — Accueil">
+    <svg viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="dgrad-nav" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#8A9CC2"/>
+          <stop offset="55%" stop-color="#C4CDE0"/>
+          <stop offset="100%" stop-color="#E6EAF4"/>
+        </linearGradient>
+      </defs>
+      <!-- S -->
+      <text x="6" y="48" font-family="Arial Black,Arial" font-weight="900" font-size="46" fill="#1A2980" font-style="italic">S</text>
+      <!-- M -->
+      <text x="46" y="48" font-family="Arial Black,Arial" font-weight="900" font-size="46" fill="#1A2980" font-style="italic">M</text>
+      <!-- D silver gradient -->
+      <text x="102" y="48" font-family="Arial Black,Arial" font-weight="900" font-size="46" fill="url(#dgrad-nav)" font-style="italic">D</text>
+      <!-- Swoosh arc -->
+      <path d="M 8 54 Q 96 66 186 52" fill="none" stroke="#1A2980" stroke-width="2.8" stroke-linecap="round"/>
+      <!-- Flèche diagonale haut-droite -->
+      <line x1="88" y1="38" x2="168" y2="6" stroke="#1A2980" stroke-width="2.6" stroke-linecap="round"/>
+      <polygon points="168,6 157,11 163,18" fill="#1A2980"/>
+      <!-- CONSULTING -->
+      <text x="22" y="66" font-family="Arial,sans-serif" font-size="10" fill="#1A2980" letter-spacing="5" font-weight="500">CONSULTING</text>
+    </svg>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#saas">ARC PCG</a></li>
+    <li><a href="#pricing">Tarifs</a></li>
+    <li><a href="#contact" class="nav-cta">Nous contacter</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <span class="hero-badge">Comptable Confirmé Freelance · Blois (41)</span>
+    <h1>
+      Comptabilité & Gestion<br/>au service de votre <span>croissance</span>
+    </h1>
+    <p>
+      SMD Consulting accompagne TPE, PME, professions libérales et associations
+      dans leur gestion comptable, fiscale et sociale —
+      avec un contrôle de conformité comptable de premier niveau.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Prendre rendez-vous</a>
+      <a href="#saas" class="btn-outline">Découvrir ARC PCG</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-card">
+      <span class="num">+10 ans</span>
+      <span class="lbl">d'expérience en comptabilité</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">PCG</span>
+      <span class="lbl">Plan Comptable Général maîtrisé</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">Blois</span>
+      <span class="lbl">Centre-Val de Loire</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">IA</span>
+      <span class="lbl">Contrôle de conformité PCG</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── À PROPOS ─────────────────────────────────────── -->
+<section class="about" id="about">
+  <span class="section-tag">À propos</span>
+  <h2>Un comptable de confiance,<br/>ancré dans votre territoire</h2>
+  <p class="section-intro">
+    Basé à Blois, SMD Consulting est votre partenaire comptable de proximité
+    pour le Loir-et-Cher et la région Centre-Val de Loire.
+  </p>
+
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        Fondé par Souleymane DIALLO, comptable confirmé freelance avec plus de cinq ans d'expérience
+        en entreprise et en milieu associatif, SMD Consulting place la rigueur et la proximité au cœur de chaque mission.
+      </p>
+      <p>
+        Notre connaissance fine du tissu économique local — artisans, commerçants,
+        professions libérales, associations Loi 1901 et agriculteurs — nous permet
+        d'apporter un accompagnement sur-mesure, réactif et pédagogique.
+      </p>
+      <p>
+        SMD Consulting développe également
+        <strong>ARC PCG</strong> (Assistant de Révision Comptable), l'outil de contrôle de conformité
+        des écritures comptables et de sécurisation des flux, dédié au Plan Comptable
+        Général français.
+      </p>
+    </div>
+
+    <div class="about-highlights">
+      <div class="highlight">
+        <div class="highlight-icon">📍</div>
+        <div>
+          <h3>Ancrage local</h3>
+          <p>Blois (41) — interventions dans tout le Centre-Val de Loire. Disponibilité immédiate.</p>
+        </div>
+      </div>
+      <div class="highlight">
+        <div class="highlight-icon">🎯</div>
+        <div>
+          <h3>Polyvalence sectorielle</h3>
+          <p>Artisans, commerces, professions libérales, associations, agriculteurs.</p>
+        </div>
+      </div>
+      <div class="highlight">
+        <div class="highlight-icon">🤖</div>
+        <div>
+          <h3>Contrôle &amp; Conformité PCG</h3>
+          <p>Maîtrise des logiciels à IA (Pennylane, Sage, EBP) et supervision qualité PCG.</p>
+        </div>
+      </div>
+      <div class="highlight">
+        <div class="highlight-icon">⚡</div>
+        <div>
+          <h3>Cegid Quadra · Sage · EBP</h3>
+          <p>Opérationnel immédiatement sur les principaux logiciels comptables.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ─────────────────────────────────────── -->
+<section id="services">
+  <span class="section-tag navy">Services</span>
+  <h2>Nos prestations comptables</h2>
+  <p class="section-intro">
+    De la tenue courante à la clôture annuelle, en passant par le conseil fiscal —
+    un accompagnement complet, adapté à votre structure.
+  </p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon" style="background:#E8EEF4;">📒</div>
+      <h3>Tenue & révision comptable</h3>
+      <p>Saisie, lettrage, rapprochements bancaires, révision des dossiers et préparation aux arrêtés de comptes.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon" style="background:#E8F8F5;">📊</div>
+      <h3>Comptes annuels & liasse fiscale</h3>
+      <p>Établissement du bilan, compte de résultat, annexes, liasse fiscale IS/IR et dépôt au greffe.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon" style="background:#EBF5FB;">🧾</div>
+      <h3>Déclarations fiscales</h3>
+      <p>TVA (CA3/CA12), IS, CFE, CVAE, taxe sur les salaires — respect des délais et optimisation légale.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon" style="background:#FEF9E7;">👥</div>
+      <h3>Social & paie</h3>
+      <p>DSN mensuelle, bulletins de paie, charges sociales, URSSAF — gestion complète de vos obligations sociales.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon" style="background:#E8F8F5;">🏛️</div>
+      <h3>Associations Loi 1901</h3>
+      <p>Comptabilité d'engagement, trésorerie associative, rapports AG, dossiers de subventions.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon" style="background:#E8EEF4;">💼</div>
+      <h3>Conseil aux dirigeants</h3>
+      <p>Tableaux de bord, analyse de rentabilité, SIG, prévisionnel et aide à la décision de gestion.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SAAS ──────────────────────────────────────────── -->
+<section class="saas" id="saas">
+  <span class="section-tag" style="background:rgba(26,188,156,.15); color:#1ABC9C;">Nouveau · SaaS Comptable</span>
+  <h2>ARC PCG — Assistant de Révision Comptable</h2>
+  <p class="section-intro">
+    Le premier outil de contrôle de conformité des écritures comptables au Plan Comptable Général,
+    dédié au Plan Comptable Général français. Vérifiez, corrigez, validez — en toute conformité DGFiP.
+  </p>
+
+  <div class="saas-grid">
+    <div class="saas-features">
+      <div class="saas-feature">
+        <div class="saas-feature-dot"></div>
+        <div>
+          <h3>Détection d'erreurs PCG</h3>
+          <p>Analyse automatique de chaque écriture générée par IA et vérification de la conformité au Plan Comptable Général.</p>
+        </div>
+      </div>
+      <div class="saas-feature">
+        <div class="saas-feature-dot"></div>
+        <div>
+          <h3>Compatible Pennylane, Sage, EBP</h3>
+          <p>Contrôle de conformité des écritures issues de tous les logiciels du marché (Sage, EBP, Pennylane, Cegid).</p>
+        </div>
+      </div>
+      <div class="saas-feature">
+        <div class="saas-feature-dot"></div>
+        <div>
+          <h3>Rapport de conformité DGFiP</h3>
+          <p>Génération automatique d'un rapport d'anomalies structuré, prêt pour le dossier de révision ou le contrôle fiscal.</p>
+        </div>
+      </div>
+      <div class="saas-feature">
+        <div class="saas-feature-dot"></div>
+        <div>
+          <h3>Zéro erreur PCG — tolérance garantie</h3>
+          <p>Rigueur comptable maximale : aucun compte hors plan, aucune inversion débit/crédit, aucun déséquilibre.</p>
+        </div>
+      </div>
+
+      <div class="saas-cta">
+        <a href="#contact" class="btn-primary">Demander une démo</a>
+        <a href="#contact" class="btn-outline">En savoir plus</a>
+      </div>
+    </div>
+
+    <div class="saas-mockup">
+      <div class="mockup-header">
+        <div class="mockup-dot" style="background:#E74C3C;"></div>
+        <div class="mockup-dot" style="background:#F39C12;"></div>
+        <div class="mockup-dot" style="background:#2ECC71;"></div>
+        <span class="mockup-title">ARC PCG — Rapport de contrôle de conformité</span>
+      </div>
+      <div class="mockup-row">
+        <span class="mockup-label">411000 Client A — Facture vente</span>
+        <span class="badge badge-ok">✓ Conforme PCG</span>
+      </div>
+      <div class="mockup-row">
+        <span class="mockup-label">607000 Achats marchandises</span>
+        <span class="badge badge-ok">✓ Conforme PCG</span>
+      </div>
+      <div class="mockup-row">
+        <span class="mockup-label">445710 TVA collectée (auto)</span>
+        <span class="badge badge-warn">⚠ Taux à vérifier</span>
+      </div>
+      <div class="mockup-row">
+        <span class="mockup-label">512001 Banque — Virement</span>
+        <span class="badge badge-ok">✓ Conforme PCG</span>
+      </div>
+      <div class="mockup-row">
+        <span class="mockup-label">681110 Dotation (auto)</span>
+        <span class="badge badge-err">✗ Erreur débit/crédit</span>
+      </div>
+      <div class="mockup-row">
+        <span class="mockup-label">401000 Fournisseur B</span>
+        <span class="badge badge-ok">✓ Conforme PCG</span>
+      </div>
+      <div style="margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,.1); display:flex; justify-content:space-between; font-size:12px; color:rgba(255,255,255,.5);">
+        <span>6 écritures analysées</span>
+        <span style="color:#1ABC9C; font-weight:600;">4 OK · 1 avertissement · 1 erreur</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TARIFS ────────────────────────────────────────── -->
+<section class="pricing" id="pricing">
+  <span class="section-tag">Tarifs</span>
+  <h2>Des formules adaptées à votre taille</h2>
+  <p class="section-intro">
+    Transparence tarifaire, sans surprise. Chaque mission est précédée d'un devis gratuit.
+  </p>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <p class="plan-name">Essentiel</p>
+      <p class="price">Sur devis <span></span></p>
+      <p class="price-desc">Tenue comptable mensuelle</p>
+      <ul>
+        <li>Saisie et lettrage</li>
+        <li>Déclarations TVA</li>
+        <li>Bilan annuel</li>
+        <li>Liasse fiscale</li>
+      </ul>
+      <a href="#contact" class="btn-card btn-card-outline">Demander un devis</a>
+    </div>
+
+    <div class="pricing-card featured">
+      <span class="pricing-badge">Le plus demandé</span>
+      <p class="plan-name">Mission complète</p>
+      <p class="price">Sur devis <span></span></p>
+      <p class="price-desc">Comptabilité + social + conseil</p>
+      <ul>
+        <li>Tenue + révision</li>
+        <li>DSN et fiches de paie</li>
+        <li>Comptes annuels complets</li>
+        <li>Conseil dirigeant trimestriel</li>
+        <li>Accès ARC PCG inclus</li>
+      </ul>
+      <a href="#contact" class="btn-card btn-card-green">Prendre rendez-vous</a>
+    </div>
+
+    <div class="pricing-card">
+      <p class="plan-name">ARC PCG</p>
+      <p class="price">SaaS <span>/ abonnement</span></p>
+      <p class="price-desc">Assistant de Révision Comptable</p>
+      <ul>
+        <li>Analyse des écritures IA</li>
+        <li>Rapport de conformité PCG</li>
+        <li>Intégration Pennylane / Sage</li>
+        <li>Démo sur cas concret</li>
+      </ul>
+      <a href="#contact" class="btn-card btn-card-outline">Demander une démo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ───────────────────────────────────────── -->
+<section id="contact">
+  <span class="section-tag navy">Contact</span>
+  <h2>Parlons de votre projet</h2>
+  <p class="section-intro">
+    Un devis gratuit, un conseil ou une démonstration d'ARC PCG — répondons-nous sous 24 h.
+  </p>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h3>Adresse</h3>
+          <p>38 Rue Christophe Colomb<br/>41000 Blois</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div>
+          <h3>Email</h3>
+          <a href="mailto:contact@smdconsulting.pro">contact@smdconsulting.pro</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">⏰</div>
+        <div>
+          <h3>Disponibilité</h3>
+          <p>Immédiate — Du lundi au vendredi<br/>Déplacements CVL possibles</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🤖</div>
+        <div>
+          <h3>Démo ARC PCG</h3>
+          <p>Démonstration sur cas concret disponible<br/>sur simple demande</p>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <input type="text" placeholder="Votre nom *" required />
+        <input type="text" placeholder="Votre société" />
+      </div>
+      <input type="email" placeholder="Votre email *" required />
+      <select>
+        <option value="">Objet de votre demande</option>
+        <option>Devis comptabilité</option>
+        <option>Démo ARC PCG</option>
+        <option>Mission ponctuelle</option>
+        <option>Partenariat / Réseau</option>
+        <option>Autre</option>
+      </select>
+      <textarea placeholder="Décrivez votre besoin ou posez votre question..."></textarea>
+      <button type="submit">Envoyer le message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg" style="height:40px;" aria-label="SMD Consulting">
+        <defs>
+          <linearGradient id="dgrad-footer" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+            <stop offset="55%" stop-color="rgba(255,255,255,0.80)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0.95)"/>
+          </linearGradient>
+        </defs>
+        <text x="6" y="48" font-family="Arial Black,Arial" font-weight="900" font-size="46" fill="#FFFFFF" font-style="italic">S</text>
+        <text x="46" y="48" font-family="Arial Black,Arial" font-weight="900" font-size="46" fill="#FFFFFF" font-style="italic">M</text>
+        <text x="102" y="48" font-family="Arial Black,Arial" font-weight="900" font-size="46" fill="url(#dgrad-footer)" font-style="italic">D</text>
+        <path d="M 8 54 Q 96 66 186 52" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.8" stroke-linecap="round"/>
+        <line x1="88" y1="38" x2="168" y2="6" stroke="rgba(255,255,255,0.9)" stroke-width="2.6" stroke-linecap="round"/>
+        <polygon points="168,6 157,11 163,18" fill="rgba(255,255,255,0.9)"/>
+        <text x="22" y="66" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="5" font-weight="500">CONSULTING</text>
+      </svg>
+      <p>Comptable confirmé freelance basé à Blois (41), spécialisé en comptabilité TPE/PME et en contrôle de conformité PCG (ARC PCG).</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Tenue comptable</a></li>
+        <li><a href="#services">Liasse fiscale</a></li>
+        <li><a href="#services">Déclarations TVA</a></li>
+        <li><a href="#services">Social & paie</a></li>
+        <li><a href="#services">Associations</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>ARC PCG</h4>
+      <ul>
+        <li><a href="#saas">Présentation</a></li>
+        <li><a href="#contact">Demander une démo</a></li>
+        <li><a href="#pricing">Tarifs SaaS</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 SMD Consulting — DIALLO Souleymane · Blois (41)</span>
+    <span>
+      <a href="#">Mentions légales</a> ·
+      <a href="#">Politique de confidentialité</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = '✓ Message envoyé !';
+    btn.style.background = '#0E6655';
+    setTimeout(() => {
+      btn.textContent = 'Envoyer le message →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
