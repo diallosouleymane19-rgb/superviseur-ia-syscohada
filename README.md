@@ -1,5 +1,5 @@
 # RevisionPro SYSCOHADA
-### Assistant de Révision Comptable OHADA/UEMOA — SMD Consulting
+### Assistant de Révision Comptable OHADA/UEMOA — SMD Global Consulting LLC
 
 > *"Vous gardez le contrôle total. Nous sécurisons la conformité."*
 
@@ -127,10 +127,10 @@ streamlit run app.py
 ## Auteur
 
 **Souleymane Diallo** — Comptable confirmé freelance  
-SMD Consulting — Blois (41), interventions Centre-Val de Loire et UEMOA  
+SMD Global Consulting LLC — Blois (41), interventions Centre-Val de Loire et UEMOA  
 📧 contact@smdconsulting.pro  
 🌐 [www.smdconsulting.pro](https://smdconsulting.pro)
 
 ---
 
-*RevisionPro SYSCOHADA — SMD Consulting © 2026*
+*RevisionPro SYSCOHADA — SMD Global Consulting LLC © 2026*
