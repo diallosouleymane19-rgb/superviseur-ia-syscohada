@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-utils/stripe_billing.py - SMD Consulting / SYSCOHADA
+utils/stripe_billing.py - SMD Global Consulting LLC / SYSCOHADA
 Integration Stripe Billing : checkout, customer portal, webhooks.
 Prix en FCFA (XOF) - devise zero-decimal Stripe.
 Import stripe lazy pour eviter les echecs au demarrage.

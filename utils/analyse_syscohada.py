@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module Analyse SYSCOHADA - SMD Consulting
+Module Analyse SYSCOHADA - SMD Global Consulting LLC
 Analyses comptables et fiscales selon normes OHADA/UEMOA
 Version 2025 — Données fiscales actualisées + Veille RSS
 v2.3 : Fix formatage FCFA (espaces pour milliers, pas de centimes)

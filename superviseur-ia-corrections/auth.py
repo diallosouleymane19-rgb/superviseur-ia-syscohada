@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module d'authentification sécurisé - SMD Consulting
+Module d'authentification sécurisé - SMD Global Consulting LLC
 Conformité RGPD - Hashage SHA256 - Gestion des rôles - Timeout session
 """
 import streamlit as st
@@ -26,7 +26,7 @@ def _get_users() -> dict:
             st.secrets["AUTH_EMAIL"]: {
                 "password_hash": _hash_password(st.secrets["AUTH_PASSWORD"]),
                 "role": "Administrateur",
-                "nom": "SMD Consulting"
+                "nom": "SMD Global Consulting LLC"
             }
         }
         # Utilisateurs supplémentaires si définis dans secrets

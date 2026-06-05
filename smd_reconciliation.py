@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module Rapprochement Bancaire - SMD Consulting
+Module Rapprochement Bancaire - SMD Global Consulting LLC
 Comparaison Releve Bancaire vs Grand Livre Banque (SYSCOHADA)
 """
 

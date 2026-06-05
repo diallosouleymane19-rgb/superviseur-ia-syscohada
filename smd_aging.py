@@ -1,6 +1,6 @@
-"""
+﻿"""
 smd_aging.py - Balance Agee Clients / Fournisseurs
-SMD Consulting - Superviseur IA Comptable & Fiscal UEMOA
+SMD Global Consulting LLC - Superviseur IA Comptable & Fiscal UEMOA
 Version 1.0
 
 Usage dans app.py :

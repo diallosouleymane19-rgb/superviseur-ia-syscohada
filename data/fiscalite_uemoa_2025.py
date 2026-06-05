@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Données fiscales UEMOA 2025/2026 - SMD Consulting
+Données fiscales UEMOA 2025/2026 - SMD Global Consulting LLC
 Source : Lois de Finances 2025, Actes OHADA, DGI par pays
 Mise à jour : Mai 2026
 """

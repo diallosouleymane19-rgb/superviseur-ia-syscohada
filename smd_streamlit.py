@@ -1,5 +1,5 @@
-"""
-smd_streamlit.py — Pages Streamlit SMD Consulting
+﻿"""
+smd_streamlit.py — Pages Streamlit SMD Global Consulting LLC
 Tableau de Bord Fiscal + Analyse du Risque Fiscal
 Version 2.0 — UEMOA / OHADA
 
@@ -322,7 +322,7 @@ def page_dashboard():
     st.markdown("""
     <div class="smd-header">
         <h1>📊 Tableau de Bord Fiscal Mensuel</h1>
-        <p>SMD Consulting — Superviseur IA Comptable & Fiscal UEMOA / OHADA</p>
+        <p>SMD Global Consulting LLC — Superviseur IA Comptable & Fiscal UEMOA / OHADA</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -503,7 +503,7 @@ def page_dashboard():
     # Pied de page
     st.markdown("---")
     st.caption(
-        "SMD Consulting — Superviseur IA Comptable & Fiscal UEMOA/OHADA v2.0  |  "
+        "SMD Global Consulting LLC — Superviseur IA Comptable & Fiscal UEMOA/OHADA v2.0  |  "
         "Ce tableau de bord est produit sur la base de la balance fournie. "
         "Il ne constitue pas un audit légal."
     )
@@ -522,7 +522,7 @@ def page_risque_fiscal():
     st.markdown("""
     <div class="smd-header">
         <h1>🔍 Analyse du Risque Fiscal</h1>
-        <p>SMD Consulting — Détection des risques fiscaux & préparation aux contrôles DGCI / DGI</p>
+        <p>SMD Global Consulting LLC — Détection des risques fiscaux & préparation aux contrôles DGCI / DGI</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -699,7 +699,7 @@ def page_risque_fiscal():
             st.info("Installez `python-docx` pour activer l'export Word.")
 
     st.caption(
-        "SMD Consulting — Ce rapport est produit sur la base de la balance fournie. "
+        "SMD Global Consulting LLC — Ce rapport est produit sur la base de la balance fournie. "
         "Il ne constitue pas un audit légal. "
         f"Administration fiscale compétente : {result['admin']} — {pays}."
     )
@@ -925,7 +925,7 @@ def _generer_word_facture(lignes: list, meta: dict):
         row[3].text = "{:,.0f}".format(cre).replace(",", " ") if cre else ""
         row[4].text = str(ligne.get("ref", ""))
     doc.add_paragraph("")
-    doc.add_paragraph("SMD Consulting — Superviseur IA Comptable UEMOA/OHADA", style="Caption")
+    doc.add_paragraph("SMD Global Consulting LLC — Superviseur IA Comptable UEMOA/OHADA", style="Caption")
     buf = _BIO()
     doc.save(buf)
     buf.seek(0)
@@ -1094,7 +1094,7 @@ def page_analyse_facture():
 # ─────────────────────────────────────────────
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="SMD Consulting — Fiscal UEMOA",
+        page_title="SMD Global Consulting LLC — Fiscal UEMOA",
         page_icon="📊",
         layout="wide",
         initial_sidebar_state="expanded",
@@ -1108,7 +1108,7 @@ if __name__ == "__main__":
             label_visibility="collapsed"
         )
         st.markdown("---")
-        st.markdown("**SMD Consulting**")
+        st.markdown("**SMD Global Consulting LLC**")
         st.markdown("Superviseur IA Comptable & Fiscal")
         st.markdown("UEMOA / OHADA — v2.0")
 

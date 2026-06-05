@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module de base de données sécurisé - SMD Consulting
+Module de base de données sécurisé - SMD Global Consulting LLC
 Conformité RGPD : chiffrement, purge automatique, traçabilité
 """
 import sqlite3

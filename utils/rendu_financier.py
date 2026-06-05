@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 
 def _fmt(v, d="FCFA"):
@@ -8,7 +8,7 @@ def _fmt(v, d="FCFA"):
         return f"{v} {d}"
 
 utils/rendu_financier.py — Moteur de rendu financier structuré
-SMD Consulting — Superviseur IA PCG France
+SMD Global Consulting LLC — Superviseur IA PCG France
 Transforme les sorties narratives Mistral en KPIs + tableaux + alertes visuelles.
 """
 import re

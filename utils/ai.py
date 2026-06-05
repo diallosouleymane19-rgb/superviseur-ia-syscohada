@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Appel API Mistral — SMD Consulting
+Appel API Mistral — SMD Global Consulting LLC
 Supporte : .env (local) ET st.secrets (Streamlit Cloud)
 v2.1 : timeout 120s, retry x2, paramètre model, max_tokens
 """

@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Liasse Fiscale Officielle — DGID Sénégal
 Format SYSCOHADA révisé 2017 — États Annuels (SAES)
 Mapping comptes SYSCOHADA → lignes officielles DGID
-RevisionPro SYSCOHADA — SMD Consulting © 2026
+RevisionPro SYSCOHADA — SMD Global Consulting LLC © 2026
 """
 
 import pandas as pd

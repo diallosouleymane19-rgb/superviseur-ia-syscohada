@@ -1,6 +1,6 @@
-"""
+﻿"""
 smd_engine.py — Moteur de calcul fiscal UEMOA/OHADA
-SMD Consulting — Superviseur IA Comptable & Fiscal
+SMD Global Consulting LLC — Superviseur IA Comptable & Fiscal
 Version 2.0
 
 Usage:
@@ -771,7 +771,7 @@ def generate_word(result: dict) -> BytesIO:
     # Avertissement
     add_para(
         "Avertissement : Ce rapport est produit sur la base de la balance des comptes fournie. "
-        "Il ne constitue pas un audit légal. SMD Consulting recommande de consulter un expert-comptable "
+        "Il ne constitue pas un audit légal. SMD Global Consulting LLC recommande de consulter un expert-comptable "
         "ou avocat fiscaliste local avant toute démarche auprès de l'administration fiscale.",
         color="888888"
     )

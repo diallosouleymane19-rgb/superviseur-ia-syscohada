@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module Tableau de Tresorerie Previsionnelle - SMD Consulting
+Module Tableau de Tresorerie Previsionnelle - SMD Global Consulting LLC
 Suivi encaissements/decaissements sur 30/60/90 jours - SYSCOHADA
 """
 

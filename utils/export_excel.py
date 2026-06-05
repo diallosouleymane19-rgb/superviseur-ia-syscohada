@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module Export Excel SYSCOHADA - SMD Consulting
+Module Export Excel SYSCOHADA - SMD Global Consulting LLC
 Génération d'états financiers professionnels en Excel
 Bilan | Compte de Résultat | TAFIRE | Notes | Liasse Fiscale
 """
@@ -17,7 +17,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.styles.numbers import FORMAT_NUMBER_COMMA_SEPARATED1
 
 # =============================================================================
-# COULEURS SMD CONSULTING
+# COULEURS SMD Global Consulting LLC
 # =============================================================================
 BLEU_SMD      = "1F77B4"  # Bleu principal
 BLEU_CLAIR    = "D6E8F7"  # Bleu très clair
@@ -116,10 +116,10 @@ def ajouter_bordures(ws, min_row, max_row, min_col, max_col):
 
 
 def entete_document(ws, titre, nom_entreprise, pays, exercice, devise, nb_cols=6):
-    """Crée l'en-tête standard SMD Consulting"""
+    """Crée l'en-tête standard SMD Global Consulting LLC"""
     # Logo/Titre cabinet
     ws.row_dimensions[1].height = 30
-    style_titre_principal(ws, 1, 1, "SMD CONSULTING — SUPERVISEUR IA COMPTABLE SYSCOHADA", nb_cols)
+    style_titre_principal(ws, 1, 1, "SMD Global Consulting LLC — SUPERVISEUR IA COMPTABLE SYSCOHADA", nb_cols)
 
     # Sous-titre document
     ws.row_dimensions[2].height = 22
@@ -144,7 +144,7 @@ def pied_page(ws, row, nb_cols=6):
     ws.row_dimensions[row].height = 15
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=nb_cols)
     c = ws.cell(row=row, column=1,
-                value=f"© {datetime.now().year} SMD Consulting — Document confidentiel — Normes SYSCOHADA/OHADA — Généré par Superviseur IA Comptable")
+                value=f"© {datetime.now().year} SMD Global Consulting LLC — Document confidentiel — Normes SYSCOHADA/OHADA — Généré par Superviseur IA Comptable")
     c.font = Font(name="Calibri", size=8, italic=True, color="888888")
     c.alignment = Alignment(horizontal="center")
 
@@ -817,7 +817,7 @@ def export_etats_financiers_excel(df_balance, code_pays="SN",
     ws_garde.row_dimensions[1].height = 40
     ws_garde.merge_cells('A1:B1')
     c = ws_garde.cell(row=1, column=1,
-                      value="SMD CONSULTING — SUPERVISEUR IA COMPTABLE SYSCOHADA")
+                      value="SMD Global Consulting LLC — SUPERVISEUR IA COMPTABLE SYSCOHADA")
     c.font = Font(name="Calibri", bold=True, size=16, color=BLANC)
     c.fill = PatternFill("solid", fgColor=BLEU_SMD)
     c.alignment = Alignment(horizontal="center", vertical="center")
@@ -835,7 +835,7 @@ def export_etats_financiers_excel(df_balance, code_pays="SN",
         ("Exercice", exercice),
         ("Devise", devise),
         ("Date de génération", datetime.now().strftime("%d/%m/%Y %H:%M")),
-        ("Généré par", "SMD Consulting — Superviseur IA Comptable SYSCOHADA"),
+        ("Généré par", "SMD Global Consulting LLC — Superviseur IA Comptable SYSCOHADA"),
         ("Normes", "SYSCOHADA Révisé / Acte Uniforme OHADA"),
     ]
 

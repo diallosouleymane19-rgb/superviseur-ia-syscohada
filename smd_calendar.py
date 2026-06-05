@@ -1,6 +1,6 @@
-"""
+﻿"""
 smd_calendar.py - Calendrier des Obligations Fiscales UEMOA
-SMD Consulting - Superviseur IA Comptable & Fiscal
+SMD Global Consulting LLC - Superviseur IA Comptable & Fiscal
 Version 1.0
 
 Usage dans app.py :
@@ -288,7 +288,7 @@ def _export_calendrier_excel(df: pd.DataFrame, pays: str, mois: int, annee: int)
     ws["A1"].alignment = Alignment(horizontal="center")
 
     ws.merge_cells("A2:G2")
-    ws["A2"] = NOMS_MOIS_FR[mois] + " " + str(annee) + " — SMD Consulting"
+    ws["A2"] = NOMS_MOIS_FR[mois] + " " + str(annee) + " — SMD Global Consulting LLC"
     ws["A2"].font = Font(italic=True)
     ws["A2"].alignment = Alignment(horizontal="center")
 

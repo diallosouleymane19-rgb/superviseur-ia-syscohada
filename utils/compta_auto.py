@@ -1,4 +1,4 @@
-from .ai import appel_mistral
+﻿from .ai import appel_mistral
 from datetime import datetime
 
 def analyse_balance_ai(df, exercice=None):

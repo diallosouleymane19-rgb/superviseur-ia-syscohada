@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-utils/db_supabase.py - SMD Consulting
+utils/db_supabase.py - SMD Global Consulting LLC
 Client Supabase partage (service role) pour PCG France & SYSCOHADA.
 
 Secrets requis dans .streamlit/secrets.toml :

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """Refonte page Accueil — version pro epuree"""
 import sys, re
 
@@ -29,7 +29,7 @@ NEW_BLOCK = r'''if page == "\U0001f3e0 Accueil":
     <div style="padding:1.5rem 1rem 1rem 1rem; border-bottom:2px solid #1F4E79; margin-bottom:1.5rem;">
         <h1 style="margin:0; color:#1F4E79; font-size:1.9rem;">Superviseur IA Comptable</h1>
         <p style="margin:0.4rem 0 0 0; color:#555; font-size:0.95rem;">
-            SMD Consulting &nbsp;&middot;&nbsp; Audit &amp; Finance augment&eacute;s par l'IA
+            SMD Global Consulting LLC &nbsp;&middot;&nbsp; Audit &amp; Finance augment&eacute;s par l'IA
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -58,7 +58,7 @@ NEW_BLOCK = r'''if page == "\U0001f3e0 Accueil":
     c4.metric("\U0001f512 Données", "Non conservées")
 
     st.divider()
-    st.caption("SMD Consulting © 2026 — PCG France · ANC/CRC 99-02 · Données traitées localement, jamais stockées.")'''
+    st.caption("SMD Global Consulting LLC © 2026 — PCG France · ANC/CRC 99-02 · Données traitées localement, jamais stockées.")'''
 
 # Remplacer le bloc
 app = app[:idx_start] + NEW_BLOCK + app[idx_end:]

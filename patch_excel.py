@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """Script patch - Connexion module export Excel dans app.py"""
 
 with open('app.py', 'r', encoding='utf-8') as f:

@@ -1,4 +1,4 @@
-import re, shutil
+﻿import re, shutil
 
 REPO = "C:/Users/blois/superviseur-ia"
 

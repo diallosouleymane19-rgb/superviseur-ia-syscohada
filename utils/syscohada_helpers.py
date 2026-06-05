@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-utils/syscohada_helpers.py - SMD Consulting
+utils/syscohada_helpers.py - SMD Global Consulting LLC
 Fonctions utilitaires partagées par toutes les pages SYSCOHADA.
 """
 import streamlit as st

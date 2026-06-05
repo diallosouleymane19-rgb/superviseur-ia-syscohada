@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Module Aide TVA CA3 / CA12
 Calcul, vérification et aide à la déclaration TVA France
-SMD Consulting - DGFiP / PCG France
+SMD Global Consulting LLC - DGFiP / PCG France
 """
 import streamlit as st
 import pandas as pd

@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module Plan de Financement SYSCOHADA — SMD Consulting
+Module Plan de Financement SYSCOHADA — SMD Global Consulting LLC
 Saisie manuelle + Import balance | Analyse IA Mistral | Export Excel/Word
 """
 

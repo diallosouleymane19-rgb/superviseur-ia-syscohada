@@ -1,4 +1,4 @@
-from docx import Document
+﻿from docx import Document
 from docx.shared import Pt, RGBColor, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from datetime import datetime
@@ -13,7 +13,7 @@ def export_analyse_word(titre, contenu, nom_entreprise="", pays="", exercice="")
     # --- EN-TÊTE ---
     header = doc.sections[0].header
     header_para = header.paragraphs[0]
-    header_para.text = "SMD Consulting — Superviseur IA Comptable SYSCOHADA"
+    header_para.text = "SMD Global Consulting LLC — Superviseur IA Comptable SYSCOHADA"
     header_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     # --- TITRE PRINCIPAL ---
@@ -38,7 +38,7 @@ def export_analyse_word(titre, contenu, nom_entreprise="", pays="", exercice="")
         run.bold = True
 
     run = info.add_run(f"Date : {datetime.now().strftime('%d/%m/%Y')}\n")
-    run = info.add_run("Généré par SMD Consulting — Superviseur IA Comptable SYSCOHADA")
+    run = info.add_run("Généré par SMD Global Consulting LLC — Superviseur IA Comptable SYSCOHADA")
     run.italic = True
 
     doc.add_paragraph("")
@@ -67,7 +67,7 @@ def export_analyse_word(titre, contenu, nom_entreprise="", pays="", exercice="")
     # --- PIED DE PAGE ---
     footer = doc.sections[0].footer
     footer_para = footer.paragraphs[0]
-    footer_para.text = f"© {datetime.now().year} SMD Consulting — Document confidentiel — Normes SYSCOHADA/OHADA"
+    footer_para.text = f"© {datetime.now().year} SMD Global Consulting LLC — Document confidentiel — Normes SYSCOHADA/OHADA"
     footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     # --- SAUVEGARDE ---

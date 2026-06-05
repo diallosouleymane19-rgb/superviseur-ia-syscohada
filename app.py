@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-RevisionPro SYSCOHADA - SMD Consulting
+RevisionPro SYSCOHADA - SMD Global Consulting LLC
 Application de supervision comptable selon normes OHADA/UEMOA
 Auteur: Souleymane Diallo
 Version: 2.3 (Fix formatage FCFA avec espaces)
@@ -125,7 +125,7 @@ if not is_connecte():
         st.markdown("---")
         st.caption("📧 Support : contact@smdconsulting.pro")
     st.divider()
-    st.caption("SMD Consulting © 2026 — RevisionPro SYSCOHADA")
+    st.caption("SMD Global Consulting LLC © 2026 — RevisionPro SYSCOHADA")
     st.stop()
 
 # =============================================================================
@@ -692,7 +692,7 @@ if page == "🏠 Accueil":
     with _sp3:
         st.success("✅ **IA éthique**\n\nDonnées non utilisées pour entraîner Mistral")
     st.divider()
-    st.caption("**SMD Consulting** — RevisionPro SYSCOHADA © 2026")
+    st.caption("**SMD Global Consulting LLC** — RevisionPro SYSCOHADA © 2026")
 
 # =============================================================================
 # PAGE : DOSSIERS ENTREPRISES

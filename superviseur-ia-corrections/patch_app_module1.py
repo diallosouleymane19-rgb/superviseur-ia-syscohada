@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import sys
 
 REPO = r"C:\Users\blois\superviseur-ia"

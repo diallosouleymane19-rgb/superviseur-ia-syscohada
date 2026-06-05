@@ -1,4 +1,4 @@
-# Plan Comptable SYSCOHADA Révisé
+﻿# Plan Comptable SYSCOHADA Révisé
 # Source : OHADA - Acte Uniforme relatif au droit comptable
 
 PLAN_COMPTABLE = {

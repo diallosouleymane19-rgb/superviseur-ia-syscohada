@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import shutil, py_compile
 
 REPO   = r"C:\Users\blois\superviseur-ia"

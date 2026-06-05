@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 auth.py — RevisionPro SYSCOHADA
 Authentification : RBAC (smd_users.db) → ancienne DB (smd_syscohada.db) → secrets admin.
@@ -82,7 +82,7 @@ def login(email: str, password: str) -> bool:
                 role    = "admin",
                 nom     = email.split("@")[0],
                 plan    = "enterprise",
-                cabinet = "SMD Consulting",
+                cabinet = "SMD Global Consulting LLC",
             )
             return True
     except Exception:
@@ -90,9 +90,9 @@ def login(email: str, password: str) -> bool:
             _set_session(
                 email   = email,
                 role    = "admin",
-                nom     = "SMD Consulting",
+                nom     = "SMD Global Consulting LLC",
                 plan    = "enterprise",
-                cabinet = "SMD Consulting",
+                cabinet = "SMD Global Consulting LLC",
             )
             return True
 

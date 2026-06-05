@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 from .ai import appel_mistral
 from data.plan_comptable_syscohada import get_info_pays, PLAN_COMPTABLE
 

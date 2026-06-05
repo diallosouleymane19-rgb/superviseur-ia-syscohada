@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Superviseur IA Comptable - SMD Consulting
+Superviseur IA Comptable - SMD Global Consulting LLC
 Application complète de supervision comptable augmentée par IA
 Auteur: Souleymane Diallo
 """
@@ -32,7 +32,7 @@ from auth import login, logout, is_connecte
 # =============================================================================
 
 st.set_page_config(
-    page_title="SMD Consulting - Superviseur IA", 
+    page_title="SMD Global Consulting LLC - Superviseur IA", 
     layout="wide", 
     page_icon="🔒",
     initial_sidebar_state="expanded"
@@ -86,14 +86,14 @@ if not is_connecte():  # AUTHENTIFICATION ACTIVÉE
         st.markdown("---")        
     
     st.divider()
-    st.caption("SMD Consulting © 2026 - Comptable IA Augmenté")
+    st.caption("SMD Global Consulting LLC © 2026 - Comptable IA Augmenté")
     st.stop()
 
 # =============================================================================
 # SIDEBAR - NAVIGATION
 # =============================================================================
 
-st.sidebar.title("SMD Consulting")
+st.sidebar.title("SMD Global Consulting LLC")
 st.sidebar.caption(f"👤 {st.session_state.get('user_email', 'Utilisateur')}")
 
 # Indicateur mode démo
@@ -214,7 +214,7 @@ if page == "🏠 Accueil":
     st.markdown("""
     ### 🎯 Bienvenue dans votre outil de comptabilité augmentée
     
-    Le **Superviseur IA Comptable** de SMD Consulting vous permet de :
+    Le **Superviseur IA Comptable** de SMD Global Consulting LLC vous permet de :
     
     #### 🔍 Analyse & Audit
     - **Analyse automatique de factures** via OCR (PDF, images)
@@ -279,7 +279,7 @@ if page == "🏠 Accueil":
         st.success("✅ **IA éthique**\n\nDonnées non utilisées pour entraîner Mistral")
     
     st.divider()
-    st.caption("**SMD Consulting** - Comptable IA Augmenté © 2026")
+    st.caption("**SMD Global Consulting LLC** - Comptable IA Augmenté © 2026")
 
 # -----------------------------------------------------------------------------
 # 2. ANALYSE FACTURE (OCR) - VERSION PROFESSIONNELLE
@@ -819,7 +819,7 @@ elif page == "📂 Traitement FEC":
 {chr(10).join([f"- {a['type']} ({a['gravite']}) : {a['description']}" for a in anomalies]) if anomalies else "Aucune anomalie majeure"}
 
 ---
-*Rapport généré par SMD Consulting - Superviseur IA Comptable*
+*Rapport généré par SMD Global Consulting LLC - Superviseur IA Comptable*
 """
                         try:
                             generer_bouton_word("Rapport_Audit_FEC", rapport_complet)
@@ -2440,7 +2440,7 @@ Structure ta réponse ainsi :
 
 elif page == "🔒 Confidentialité & Sécurité":
     st.title("🔒 Confidentialité & Sécurité")
-    st.markdown("**Engagements SMD Consulting** envers la protection de vos données")
+    st.markdown("**Engagements SMD Global Consulting LLC** envers la protection de vos données")
     st.divider()
 
     col1, col2, col3 = st.columns(3)
@@ -2454,9 +2454,9 @@ elif page == "🔒 Confidentialité & Sécurité":
     st.divider()
     st.markdown("### 📋 Convention de Test")
     st.info("""
-**CONVENTION DE TEST - SMD Consulting**
+**CONVENTION DE TEST - SMD Global Consulting LLC**
 
-Entre **SMD Consulting** (Souleymane Diallo) et le client soussigné, il est convenu que :
+Entre **SMD Global Consulting LLC** (Souleymane Diallo) et le client soussigné, il est convenu que :
 
 1. Les données transmises sont utilisées **uniquement** pour la démonstration du Superviseur IA Comptable
 2. **Aucune donnée n'est conservée** au-delà de la session d'analyse
@@ -2489,7 +2489,7 @@ Entre **SMD Consulting** (Souleymane Diallo) et le client soussigné, il est con
 
     st.divider()
     st.markdown("📧 **Contact** : contact@smdconsulting.pro")
-    st.caption("SMD Consulting © 2026 - Comptable IA Augmenté")
+    st.caption("SMD Global Consulting LLC © 2026 - Comptable IA Augmenté")
 
 # =============================================================================
 # FOOTER
@@ -2497,7 +2497,7 @@ Entre **SMD Consulting** (Souleymane Diallo) et le client soussigné, il est con
 
 st.divider()
 st.caption("""
-**SMD Consulting** - Superviseur IA Comptable  
+**SMD Global Consulting LLC** - Superviseur IA Comptable  
 Comptable Augmenté par Intelligence Artificielle  
 © 2026 - Souleymane Diallo
 """)

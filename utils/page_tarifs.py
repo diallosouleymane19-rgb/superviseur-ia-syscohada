@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-utils/page_tarifs.py - SMD Consulting / SYSCOHADA
+utils/page_tarifs.py - SMD Global Consulting LLC / SYSCOHADA
 Page Tarifs & Abonnement - prix en FCFA (XOF).
 Utilise st.components.v1.html pour le rendu HTML garanti.
 1 EUR = 655.957 XOF (taux fixe zone CFA)

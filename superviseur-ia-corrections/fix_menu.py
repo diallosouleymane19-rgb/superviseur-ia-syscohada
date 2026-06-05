@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 REPO = r"C:\Users\blois\superviseur-ia"
 
 with open(REPO + r"\app.py", encoding="utf-8") as f:

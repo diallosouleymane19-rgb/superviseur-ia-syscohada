@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
-Module TFT SYSCOHADA — SMD Consulting
+Module TFT SYSCOHADA — SMD Global Consulting LLC
 Tableau de Flux de Trésorerie — Format SYSCOHADA révisé 2017
 Horizon 1 à 3 exercices comparatifs
 """
